@@ -1,0 +1,18 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:icon="@drawable/ic_ruler"
+        android:key="pref_show_dl"
+        android:summaryOff="2 bor, 1 szóda"
+        android:summaryOn="2dl bor, 1dl szóda"
+        android:title="Mértékegység mutatása" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:icon="@drawable/ic_bottle_wine"
+        android:key="pref_no_limit"
+        android:summaryOff="Max 1 literes italok."
+        android:summaryOn="Hozzávalónként +1 liter."
+        android:title="Mennyiség korlát törlése" />
+</PreferenceScreen>
