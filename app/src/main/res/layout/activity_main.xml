@@ -101,28 +101,11 @@
 
                         </LinearLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="?android:attr/listDivider" />
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="end"
                             android:orientation="horizontal">
-
-                            <Button
-                                style="@style/Widget.MaterialComponents.Button.TextButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:onClick="btnGlassholderClick"
-                                android:text="Pohártartó" />
-
-                            <Space
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1" />
 
                             <Button
                                 android:id="@+id/mainBtnNewRecipe"
@@ -137,7 +120,6 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:contentDescription="TODO"
                                 android:onClick="btnShareClick"
                                 android:padding="12dp"
                                 app:srcCompat="@drawable/ic_share"
@@ -156,6 +138,13 @@
                     android:orientation="vertical"
                     android:padding="8dp" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:gravity="center"
+                    android:text="Ajánlott bor a fröccsökhöz: Olaszrizling" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -163,8 +152,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:visibility="gone">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -270,12 +258,22 @@
 
             </LinearLayout>
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/mainLayoutExtras"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:gravity="center"
-                android:text="Ajánlott bor a fröccsökhöz: Olaszrizling" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:onClick="btnGlassholderClick"
+                    android:text="Pohártartó"
+                    app:icon="@drawable/ic_glass_wine"
+                    app:iconGravity="textStart" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

@@ -50,9 +50,11 @@ class MainActivity : AppCompatActivity() {
         mainNav.setOnItemSelectedListener {
             mainLayoutDrink.visibility = View.GONE
             mainLayoutRecipes.visibility = View.GONE
+            mainLayoutExtras.visibility = View.GONE
             when (it.itemId) {
                 R.id.menuMainNavDrink -> mainLayoutDrink.visibility = View.VISIBLE
                 R.id.menuMainNavRecipes -> mainLayoutRecipes.visibility = View.VISIBLE
+                R.id.menuMainNavExtras -> mainLayoutExtras.visibility = View.VISIBLE
                 else -> return@setOnItemSelectedListener false
             }
             true

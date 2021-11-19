@@ -9,4 +9,8 @@
         android:id="@+id/menuMainNavRecipes"
         android:icon="@drawable/ic_grapes"
         android:title="Alapanyagok és receptek" />
+    <item
+        android:id="@+id/menuMainNavExtras"
+        android:icon="@drawable/ic_flare"
+        android:title="Extrák" />
 </menu>

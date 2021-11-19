@@ -2,6 +2,7 @@ package com.csakitheone.froccs
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,10 @@ class GlassholderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_glassholder)
+
+        window.attributes.apply {
+            screenBrightness = 1.0f
+        }
 
         hideSystemUI()
 
