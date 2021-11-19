@@ -20,16 +20,6 @@
             android:text="Alapanyag"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
-        <ImageButton
-            android:id="@+id/ingredientBtnRemove"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:tint="?attr/colorPrimary"
-            app:srcCompat="@drawable/ic_close" />
     </LinearLayout>
 
     <SeekBar

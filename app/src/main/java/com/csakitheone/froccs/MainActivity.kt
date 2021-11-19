@@ -22,9 +22,10 @@ import com.csakitheone.froccs.helper.Workshop
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
+import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_ingredient.view.*
-import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
     lateinit var prefs: SharedPreferences
@@ -46,8 +47,25 @@ class MainActivity : AppCompatActivity() {
             false
         }
 
+        mainNav.setOnItemSelectedListener {
+            mainLayoutDrink.visibility = View.GONE
+            mainLayoutRecipes.visibility = View.GONE
+            when (it.itemId) {
+                R.id.menuMainNavDrink -> mainLayoutDrink.visibility = View.VISIBLE
+                R.id.menuMainNavRecipes -> mainLayoutRecipes.visibility = View.VISIBLE
+                else -> return@setOnItemSelectedListener false
+            }
+            true
+        }
+        mainNav.selectedItemId = savedInstanceState?.getInt("navSelectedItemId") ?: R.id.menuMainNavDrink
+
         Data.loadUserData(this)
         loadAds()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("navSelectedItemId", mainNav.selectedItemId)
     }
 
     override fun onResume() {
@@ -63,7 +81,7 @@ class MainActivity : AppCompatActivity() {
     fun loadAds() {
         MobileAds.setRequestConfiguration(
             RequestConfiguration.Builder()
-                .setTestDeviceIds(listOf("24E9E518AB9DBE2924B9B93F22361702"))
+                .setTestDeviceIds(listOf("A95A3A512D1FE5693AE2EF06BAFC5E42"))
                 .build()
         )
         MobileAds.initialize(this)
@@ -71,25 +89,36 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun loadIngredients() {
-        mainLayoutIngredients.removeAllViews()
         currentIngredients = Data.getIngredients().toMutableList()
+
+        mainGroupIngredients.removeAllViews()
+        currentIngredients.map {
+            val v = Chip(this).apply {
+                text = it.name
+                isCheckable = false
+                isCloseIconVisible = it.name != "bor" && it.name != "szóda"
+                setOnCloseIconClickListener { _ ->
+                    MaterialAlertDialogBuilder(this@MainActivity)
+                        .setTitle(it.name)
+                        .setMessage("Biztos törlöd ezt az alapanyagot?")
+                        .setPositiveButton("Igen") { _: DialogInterface, _: Int ->
+                            Data.removeIngredient(this@MainActivity, it)
+                            loadIngredients()
+                        }
+                        .setNegativeButton("Nem") { _: DialogInterface, _: Int -> }
+                        .create().show()
+                }
+            }
+            mainGroupIngredients.addView(v)
+        }
+
+        mainLayoutDrinkIngredients.removeAllViews()
         currentIngredients.map {
             val v = it.createView(this) { s: String, i: Float ->
                 refreshMaximums()
                 findRecipe()
             }
-            v.ingredientBtnRemove.setOnClickListener { view ->
-                AlertDialog.Builder(this)
-                        .setTitle(it.name)
-                        .setMessage("Biztos törlöd ezt az alapanyagot?")
-                        .setPositiveButton("Igen") { _: DialogInterface, _: Int ->
-                            Data.removeIngredient(this, it)
-                            loadIngredients()
-                        }
-                        .setNegativeButton("Nem") { _: DialogInterface, _: Int -> }
-                        .create().show()
-            }
-            mainLayoutIngredients.addView(v)
+            mainLayoutDrinkIngredients.addView(v)
         }
         refreshMaximums()
         findRecipe()
@@ -100,7 +129,7 @@ class MainActivity : AppCompatActivity() {
 
         if (prefs.getBoolean("pref_no_limit", false)) return
 
-        for (v in mainLayoutIngredients.children) {
+        for (v in mainLayoutDrinkIngredients.children) {
             val x = currentIngredients.filter { r -> r.name != v.ingredientText.text.split(':')[0] }.sumBy { r -> (r.amount * Ingredient.AMOUNT_PRECISION).toInt() }
             v.ingredientSeek.max = 100 - x
         }
@@ -128,7 +157,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun loadRecipes() {
-        mainLayoutRecipes.removeAllViews()
+        mainLayoutUserRecipes.removeAllViews()
         Data.getRecipes().filter { r -> r.isRemovable }.map {
             val v = TextView(this)
             v.text = it.name
@@ -136,8 +165,8 @@ class MainActivity : AppCompatActivity() {
             val backgroundId = TypedValue()
             theme.resolveAttribute(R.attr.selectableItemBackground, backgroundId, true)
             v.background = ContextCompat.getDrawable(this, backgroundId.resourceId)
-            v.setOnClickListener { view ->
-                AlertDialog.Builder(this)
+            v.setOnClickListener { _ ->
+                MaterialAlertDialogBuilder(this)
                     .setTitle(it.name)
                     .setMessage(it.toString().split('\n')[1])
                     .setNegativeButton("Törlés") { _: DialogInterface, _: Int ->
@@ -146,13 +175,13 @@ class MainActivity : AppCompatActivity() {
                     }
                     .create().show()
             }
-            mainLayoutRecipes.addView(v)
+            mainLayoutUserRecipes.addView(v)
         }
         findRecipe()
     }
 
     fun btnShareClick(view: View) {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle("Hol szeretnéd megosztani a receptet?")
             .setPositiveButton("Pince") { _: DialogInterface, _: Int ->
                 Workshop.addString(Workshop.WORKSHOP_CATEGORY_RECIPE, findRecipe().toString()) {
@@ -173,7 +202,7 @@ class MainActivity : AppCompatActivity() {
     fun btnNewRecipeClick(view: View) {
         val editRecipeName = EditText(this)
         editRecipeName.hint = "Pl: Háp-háp"
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle("Új recept")
             .setView(editRecipeName)
             .setPositiveButton("Hozzáadás") { _: DialogInterface, _: Int ->
@@ -197,7 +226,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun btnGlassholderClick(view: View) {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle("Pohártartó")
             .setMessage("Ezt a funkciót csak kisebb poharakkal érdemes használni és légy nagyon óvatos, hogy a telefon sértetlen maradjon! Csak akkor használd a pohártartót, ha vállalod a következményeket!")
             .setPositiveButton("Értem és vállalom") { _: DialogInterface, _: Int ->
@@ -210,7 +239,7 @@ class MainActivity : AppCompatActivity() {
     fun btnNewIngredientClick(view: View) {
         val editIngredientName = EditText(this)
         editIngredientName.hint = "Pl: málna szörp"
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle("Új alapanyag")
             .setView(editIngredientName)
             .setPositiveButton("Hozzáadás") { _: DialogInterface, _: Int ->
@@ -232,7 +261,7 @@ class MainActivity : AppCompatActivity() {
         val recipes = Data.getRecipes()
             .filter { r -> !r.isRemovable && r.name != "Üres pohár" && !r.name.contains("(") && r.getSize() < 4 }
             .joinToString("\n\n") { r -> r.toString() }
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle("Arányok 4 deci alatt")
             .setMessage(recipes)
             .create().show()
@@ -242,7 +271,7 @@ class MainActivity : AppCompatActivity() {
         val recipes = Data.getRecipes()
             .filter { r -> !r.isRemovable && r.name != "Üres pohár" && !r.name.contains("(") && r.getSize() == 5F }
             .joinToString("\n\n") { r -> r.toString() }
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle("Fél literes arányok")
             .setMessage(recipes)
             .create().show()
@@ -252,7 +281,7 @@ class MainActivity : AppCompatActivity() {
         val recipes = Data.getRecipes()
             .filter { r -> !r.isRemovable && r.name != "Üres pohár" && !r.name.contains("(") && r.getSize() == 10F }
             .joinToString("\n\n") { r -> r.toString() }
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle("Literes arányok")
             .setMessage(recipes)
             .create().show()
@@ -262,7 +291,7 @@ class MainActivity : AppCompatActivity() {
         val recipes = Data.getRecipes()
             .filter { r -> !r.isRemovable && r.name.contains("(") }
             .joinToString("\n\n") { r -> r.toString() }
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle("Kevésbé ismert fröccsök")
             .setMessage(recipes)
             .create().show()

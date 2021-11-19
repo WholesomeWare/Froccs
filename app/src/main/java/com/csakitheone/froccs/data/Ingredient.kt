@@ -45,7 +45,6 @@ class Ingredient() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) { }
             override fun onStopTrackingTouch(seekBar: SeekBar?) { }
         })
-        v.ingredientBtnRemove.visibility = if (isRemovable) View.VISIBLE else View.GONE
         return v
     }
 
