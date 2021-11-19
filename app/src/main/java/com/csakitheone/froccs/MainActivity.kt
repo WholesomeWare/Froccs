@@ -4,16 +4,11 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.children
-import androidx.core.view.setPadding
 import androidx.preference.PreferenceManager
 import com.csakitheone.froccs.data.Data
 import com.csakitheone.froccs.data.Ingredient
@@ -159,25 +154,32 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun loadRecipes() {
-        mainLayoutUserRecipes.removeAllViews()
-        Data.getRecipes().filter { r -> r.isRemovable }.map {
-            val v = TextView(this)
-            v.text = it.name
-            v.setPadding(20)
-            val backgroundId = TypedValue()
-            theme.resolveAttribute(R.attr.selectableItemBackground, backgroundId, true)
-            v.background = ContextCompat.getDrawable(this, backgroundId.resourceId)
-            v.setOnClickListener { _ ->
-                MaterialAlertDialogBuilder(this)
-                    .setTitle(it.name)
-                    .setMessage(it.toString().split('\n')[1])
-                    .setNegativeButton("Törlés") { _: DialogInterface, _: Int ->
-                        Data.removeRecipe(this, it)
-                        loadRecipes()
-                    }
-                    .create().show()
+        mainTextRecipesTitle.text = "Receptek (${Data.getRecipes().size})"
+        mainGroupRecipes.removeAllViews()
+        Data.getRecipes().map {
+            val v = Chip(this).apply {
+                text = it.name.split("(")[0]
+                isCheckable = false
+                isCloseIconVisible = it.isRemovable
+                setOnClickListener { _ ->
+                    MaterialAlertDialogBuilder(this@MainActivity)
+                        .setTitle(it.name)
+                        .setMessage(it.toString().split('\n')[1])
+                        .create().show()
+                }
+                setOnCloseIconClickListener { _ ->
+                    MaterialAlertDialogBuilder(this@MainActivity)
+                        .setTitle(it.name)
+                        .setMessage("Biztos törlöd ezt a receptet?")
+                        .setPositiveButton("Igen") { _: DialogInterface, _: Int ->
+                            Data.removeRecipe(this@MainActivity, it)
+                            loadRecipes()
+                        }
+                        .setNegativeButton("Nem") { _: DialogInterface, _: Int -> }
+                        .create().show()
+                }
             }
-            mainLayoutUserRecipes.addView(v)
+            mainGroupRecipes.addView(v)
         }
         findRecipe()
     }

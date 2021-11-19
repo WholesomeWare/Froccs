@@ -22,22 +22,22 @@ class Data {
             addSplatter("Házmester", 3F, 2F)
             addSplatter("Viceházmester", 2F, 3F)
             addSplatter("Sportfröccs", 1F, 4F)
-            addSplatter("Krúdy-fröccs", 9F, 1F)
+            addSplatter("Krúdy fröccs", 9F, 1F)
             addSplatter("Avasi fröccs", 7F, 3F)
             addSplatter("Polgármester", 6F, 4F)
             addSplatter("Maflás", 5F, 5F)
             addSplatter("Alpolgármester", 4F, 6F)
             addSplatter("Sóherfröccs / Távolugrás", 1F, 9F)
 
-            addSplatter("Kisharapás (Cecén elterjedt)", .5F, .5F)
-            addSplatter("Háp-háp (Fehérváron elterjedt)", 2F, 2F)
-            addSplatter("Előrelépés (kevésbé ismert)", 8F, 1F)
-            addSplatter("Puskás-fröccs / Magyar-angol ()", 6F, 3F)
+            addSplatter("Kisharapás (Cecéről)", .5F, .5F)
+            addSplatter("Háp-háp (Fehérvárról)", 2F, 2F)
+            addSplatter("Előrelépés", 8F, 1F)
+            addSplatter("Puskás fröccs / Magyar-angol", 6F, 3F)
             addSplatter("Góré föccs (pohár bor és egy spriccentésnyi szóda)", 2F, .5F)
             addSplatter("Deák föccs (pohár szóda és egy csepp bor)", .5F, 2F)
             addSplatter("Ijesztett / Spricc föccs (sok bor és egy spriccentésnyi szóda)", 9.5F, .5F)
 
-            addSplatter("Csatos (1l+)", 10F, 5F)
+            addSplatter("Csatos", 10F, 5F)
         }
 
         fun loadUserData(context: Context) {

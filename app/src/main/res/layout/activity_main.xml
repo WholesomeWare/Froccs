@@ -39,7 +39,8 @@
                 android:id="@+id/mainLayoutDrink"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:visibility="gone">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -152,7 +153,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -200,58 +202,29 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <Button
-                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                        <TextView
+                            android:id="@+id/mainTextRecipesTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="textRecipesUnder4Click"
-                            android:text="Pohár (2-3dl)"
-                            app:icon="@drawable/ic_glass_wine" />
-
-                        <Button
-                            style="@style/Widget.MaterialComponents.Button.TextButton"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="textRecipes5Click"
-                            android:text="Korsó (5dl)"
-                            app:icon="@drawable/ic_glass_mug" />
-
-                        <Button
-                            style="@style/Widget.MaterialComponents.Button.TextButton"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="textRecipes1Click"
-                            android:text="Üveg (1l)"
-                            app:icon="@drawable/ic_bottle_wine" />
-
-                        <Button
-                            style="@style/Widget.MaterialComponents.Button.TextButton"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="textRecipesExtensionClick"
-                            android:text="Még több fröccs"
-                            app:icon="@drawable/ic_more_horiz" />
+                            android:padding="16dp"
+                            android:text="Receptek"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
                         <Button
                             style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="btnWorkshopClick"
-                            android:text="Pince"
+                            android:text="Közösségi receptek a pincében"
                             app:icon="@drawable/ic_barrel" />
 
-                        <View
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/mainGroupRecipes"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="?android:attr/listDivider" />
+                            android:layout_height="wrap_content"
+                            android:padding="16dp">
 
-                        <LinearLayout
-                            android:id="@+id/mainLayoutUserRecipes"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                        </LinearLayout>
+                        </com.google.android.material.chip.ChipGroup>
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
