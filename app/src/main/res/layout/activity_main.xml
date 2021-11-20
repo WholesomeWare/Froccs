@@ -153,8 +153,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:visibility="gone">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -236,7 +235,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <Button
                     android:layout_width="match_parent"
@@ -246,6 +246,12 @@
                     android:text="Pohártartó"
                     app:icon="@drawable/ic_glass_wine"
                     app:iconGravity="textStart" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="Fejlesztő támogatása videóval" />
             </LinearLayout>
 
         </LinearLayout>
