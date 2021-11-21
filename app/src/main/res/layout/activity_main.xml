@@ -139,13 +139,6 @@
                     android:orientation="vertical"
                     android:padding="8dp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:gravity="center"
-                    android:text="Ajánlott bor a fröccsökhöz: Olaszrizling" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -251,7 +244,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
+                    android:onClick="btnSupportVideoClick"
                     android:text="Fejlesztő támogatása videóval" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:gravity="center"
+                    android:text="Ajánlott bor a fröccsökhöz: Olaszrizling" />
             </LinearLayout>
 
         </LinearLayout>

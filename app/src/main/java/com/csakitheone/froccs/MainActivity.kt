@@ -229,17 +229,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(this, WorkshopActivity::class.java))
     }
 
-    fun btnGlassholderClick(view: View) {
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Pohártartó")
-            .setMessage("Ezt a funkciót csak kisebb poharakkal érdemes használni és légy nagyon óvatos, hogy a telefon sértetlen maradjon! Csak akkor használd a pohártartót, ha vállalod a következményeket!")
-            .setPositiveButton("Értem és vállalom") { _: DialogInterface, _: Int ->
-                startActivity(Intent(this, GlassholderActivity::class.java))
-            }
-            .setNegativeButton("Vissza") { _: DialogInterface, _: Int -> }
-            .create().show()
-    }
-
     fun btnNewIngredientClick(view: View) {
         val editIngredientName = EditText(this)
         editIngredientName.hint = "Pl: málna szörp"
@@ -261,43 +250,18 @@ class MainActivity : AppCompatActivity() {
             .create().show()
     }
 
-    fun textRecipesUnder4Click(view: View) {
-        val recipes = Data.getRecipes()
-            .filter { r -> !r.isRemovable && r.name != "Üres pohár" && !r.name.contains("(") && r.getSize() < 4 }
-            .joinToString("\n\n") { r -> r.toString() }
+    fun btnGlassholderClick(view: View) {
         MaterialAlertDialogBuilder(this)
-            .setTitle("Arányok 4 deci alatt")
-            .setMessage(recipes)
+            .setTitle("Pohártartó")
+            .setMessage("Ezt a funkciót csak kisebb poharakkal érdemes használni és légy nagyon óvatos, hogy a telefon sértetlen maradjon! Csak akkor használd a pohártartót, ha vállalod a következményeket!")
+            .setPositiveButton("Értem és vállalom") { _: DialogInterface, _: Int ->
+                startActivity(Intent(this, GlassholderActivity::class.java))
+            }
+            .setNegativeButton("Vissza") { _: DialogInterface, _: Int -> }
             .create().show()
     }
 
-    fun textRecipes5Click(view: View) {
-        val recipes = Data.getRecipes()
-            .filter { r -> !r.isRemovable && r.name != "Üres pohár" && !r.name.contains("(") && r.getSize() == 5F }
-            .joinToString("\n\n") { r -> r.toString() }
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Fél literes arányok")
-            .setMessage(recipes)
-            .create().show()
-    }
-
-    fun textRecipes1Click(view: View) {
-        val recipes = Data.getRecipes()
-            .filter { r -> !r.isRemovable && r.name != "Üres pohár" && !r.name.contains("(") && r.getSize() == 10F }
-            .joinToString("\n\n") { r -> r.toString() }
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Literes arányok")
-            .setMessage(recipes)
-            .create().show()
-    }
-
-    fun textRecipesExtensionClick(view: View) {
-        val recipes = Data.getRecipes()
-            .filter { r -> !r.isRemovable && r.name.contains("(") }
-            .joinToString("\n\n") { r -> r.toString() }
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Kevésbé ismert fröccsök")
-            .setMessage(recipes)
-            .create().show()
+    fun btnSupportVideoClick(view: View) {
+        startActivity(Intent(this, RewardedAdActivity::class.java))
     }
 }
