@@ -14,5 +14,12 @@
         android:key="pref_no_limit"
         android:summaryOff="Max 1 literes italok."
         android:summaryOn="Hozzávalónként +1 liter."
-        android:title="Mennyiség korlát törlése" />
+        android:title="Űrtartalom korlát törlése" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:icon="@drawable/ic_glass_wine"
+        android:key="pref_precise_seekbar"
+        android:summaryOff="Egység: 1dl"
+        android:summaryOn="Egység: 0.5dl"
+        android:title="Pontosabb csúszka az ital keveréshez" />
 </PreferenceScreen>

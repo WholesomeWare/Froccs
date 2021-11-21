@@ -35,8 +35,9 @@ class Ingredient() {
         v.ingredientSeek.progress = (amount * AMOUNT_PRECISION).toInt()
         v.ingredientSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val currentPrecision = if (prefs.getBoolean("pref_precise_seekbar", false)) 2 else 1
                 amount = progress / AMOUNT_PRECISION.toFloat()
-                amount = (amount * AMOUNT_USER_PRECISION).roundToInt() / AMOUNT_USER_PRECISION.toFloat()
+                amount = (amount * currentPrecision).roundToInt() / currentPrecision.toFloat()
                 v.ingredientText.text = "$name: " +
                         (if (amount == amount.roundToInt().toFloat()) amount.roundToInt() else amount.toString()) +
                         (if (prefs.getBoolean("pref_show_dl", true)) "dl" else "")
@@ -62,6 +63,5 @@ class Ingredient() {
 
     companion object {
         val AMOUNT_PRECISION: Int = 10
-        val AMOUNT_USER_PRECISION: Int = 2
     }
 }
