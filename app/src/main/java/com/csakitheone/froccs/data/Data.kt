@@ -14,7 +14,7 @@ class Data {
             recipes = mutableListOf()
             ingredients.add(Ingredient("bor", 0F, false))
             ingredients.add(Ingredient("szóda", 0F, false))
-            recipes.add(Recipe(context, "Üres pohár", mutableListOf(), false))
+            recipes.add(Recipe(context, "Üres üveg", mutableListOf(), false))
             addSplatter("Kisfröccs", 1F, 1F)
             addSplatter("Nagyfröccs", 2F, 1F)
             addSplatter("Hosszúlépés", 1F, 2F)
