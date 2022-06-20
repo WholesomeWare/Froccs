@@ -10,7 +10,7 @@
     android:orientation="vertical"
     tools:context=".GlassholderActivity">
 
-    <com.csakitheone.froccs.helper.GlassholderView
+    <androidx.compose.ui.platform.ComposeView
         android:id="@+id/glassholderView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:alpha=".2"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <ImageView
@@ -28,16 +29,9 @@
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="btnColorClick"
-            android:padding="16dp"
+            android:padding="8dp"
             app:srcCompat="@drawable/ic_color_lens"
             app:tint="?attr/colorPrimary" />
 
-        <SeekBar
-            android:id="@+id/glassholderSeekSize"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:max="500"
-            android:padding="16dp" />
     </LinearLayout>
 </LinearLayout>
