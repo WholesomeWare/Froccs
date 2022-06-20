@@ -6,34 +6,53 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.view.children
 import androidx.preference.PreferenceManager
 import com.csakitheone.froccs.data.Data
 import com.csakitheone.froccs.data.Ingredient
 import com.csakitheone.froccs.data.Recipe
+import com.csakitheone.froccs.databinding.ActivityMainBinding
 import com.csakitheone.froccs.helper.Workshop
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_ingredient.view.*
 
 class MainActivity : AppCompatActivity() {
+    lateinit var binding: ActivityMainBinding
+
     lateinit var prefs: SharedPreferences
-    var currentIngredients: MutableList<Ingredient> = mutableListOf()
+    var currentIngredients = mutableListOf<Ingredient>()
     var restartNeeded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-        mainToolbar.setOnMenuItemClickListener {
+        binding.mainToolbar.setOnMenuItemClickListener {
             if (it.title == "Beállítások") {
                 startActivity(Intent(this, SettingsActivity::class.java))
                 restartNeeded = true
@@ -42,19 +61,19 @@ class MainActivity : AppCompatActivity() {
             false
         }
 
-        mainNav.setOnItemSelectedListener {
-            mainLayoutDrink.visibility = View.GONE
-            mainLayoutRecipes.visibility = View.GONE
-            mainLayoutExtras.visibility = View.GONE
+        binding.mainNav.setOnItemSelectedListener {
+            binding.mainLayoutDrink.visibility = View.GONE
+            binding.mainLayoutRecipes.visibility = View.GONE
+            binding.mainLayoutExtras.visibility = View.GONE
             when (it.itemId) {
-                R.id.menuMainNavDrink -> mainLayoutDrink.visibility = View.VISIBLE
-                R.id.menuMainNavRecipes -> mainLayoutRecipes.visibility = View.VISIBLE
-                R.id.menuMainNavExtras -> mainLayoutExtras.visibility = View.VISIBLE
+                R.id.menuMainNavDrink -> binding.mainLayoutDrink.visibility = View.VISIBLE
+                R.id.menuMainNavRecipes -> binding.mainLayoutRecipes.visibility = View.VISIBLE
+                R.id.menuMainNavExtras -> binding.mainLayoutExtras.visibility = View.VISIBLE
                 else -> return@setOnItemSelectedListener false
             }
             true
         }
-        mainNav.selectedItemId = savedInstanceState?.getInt("navSelectedItemId") ?: R.id.menuMainNavDrink
+        binding.mainNav.selectedItemId = savedInstanceState?.getInt("navSelectedItemId") ?: R.id.menuMainNavDrink
 
         Data.loadUserData(this)
         loadAds()
@@ -62,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("navSelectedItemId", mainNav.selectedItemId)
+        outState.putInt("navSelectedItemId", binding.mainNav.selectedItemId)
     }
 
     override fun onResume() {
@@ -82,13 +101,13 @@ class MainActivity : AppCompatActivity() {
                 .build()
         )
         MobileAds.initialize(this)
-        mainBanner.loadAd(AdRequest.Builder().build())
+        binding.mainBanner.loadAd(AdRequest.Builder().build())
     }
 
     fun loadIngredients() {
         currentIngredients = Data.getIngredients().toMutableList()
 
-        mainGroupIngredients.removeAllViews()
+        binding.mainGroupIngredients.removeAllViews()
         currentIngredients.map {
             val v = Chip(this).apply {
                 text = it.name
@@ -106,29 +125,29 @@ class MainActivity : AppCompatActivity() {
                         .create().show()
                 }
             }
-            mainGroupIngredients.addView(v)
+            binding.mainGroupIngredients.addView(v)
         }
 
-        mainLayoutDrinkIngredients.removeAllViews()
+        binding.mainLayoutDrinkIngredients.removeAllViews()
         currentIngredients.map {
             val v = it.createView(this) { s: String, i: Float ->
                 refreshMaximums()
                 findRecipe()
             }
-            mainLayoutDrinkIngredients.addView(v)
+            binding.mainLayoutDrinkIngredients.addView(v)
         }
         refreshMaximums()
         findRecipe()
     }
 
     fun refreshMaximums() {
-        mainProgress.progress = currentIngredients.sumBy { r -> (r.amount * Ingredient.AMOUNT_PRECISION).toInt() }
+        binding.mainProgress.progress = currentIngredients.sumBy { r -> (r.amount * Ingredient.AMOUNT_PRECISION).toInt() }
 
         if (prefs.getBoolean("pref_no_limit", false)) return
 
-        for (v in mainLayoutDrinkIngredients.children) {
-            val x = currentIngredients.filter { r -> r.name != v.ingredientText.text.split(':')[0] }.sumBy { r -> (r.amount * Ingredient.AMOUNT_PRECISION).toInt() }
-            v.ingredientSeek.max = 100 - x
+        for (v in binding.mainLayoutDrinkIngredients.children) {
+            val x = currentIngredients.filter { r -> r.name != v.findViewById<TextView>(R.id.ingredientText).text.split(':')[0] }.sumBy { r -> (r.amount * Ingredient.AMOUNT_PRECISION).toInt() }
+            v.findViewById<SeekBar>(R.id.ingredientSeek).max = 100 - x
         }
     }
 
@@ -145,8 +164,8 @@ class MainActivity : AppCompatActivity() {
                 recipe = Data.getRecipes().first { r -> r.check(currentIngredients) }
             }
         }
-        mainTextRecipeName.text = recipe.name + "\n\n" + currentIngredients.sumByDouble { r -> r.amount.toDouble() }.toFloat() + (if (prefs.getBoolean("pref_show_dl", true)) "dl" else "")
-        mainBtnNewRecipe.isEnabled = recipe.name == "Nincs ilyen recept"
+        binding.mainTextRecipeName.text = recipe.name + "\n\n" + currentIngredients.sumByDouble { r -> r.amount.toDouble() }.toFloat() + (if (prefs.getBoolean("pref_show_dl", true)) "dl" else "")
+        binding.mainBtnNewRecipe.isEnabled = recipe.name == "Nincs ilyen recept"
 
         val shareable = Recipe.Builder(this).setName(recipe.name)
         currentIngredients.filter { r -> r.amount > 0 }.map { r -> shareable.addIngredient(r) }
@@ -154,34 +173,48 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun loadRecipes() {
-        mainTextRecipesTitle.text = "Receptek (${Data.getRecipes().size})"
-        mainGroupRecipes.removeAllViews()
-        Data.getRecipes().map {
-            val v = Chip(this).apply {
-                text = it.name.split("(")[0]
-                isCheckable = false
-                isCloseIconVisible = it.isRemovable
-                setOnClickListener { _ ->
-                    MaterialAlertDialogBuilder(this@MainActivity)
-                        .setTitle(it.name)
-                        .setMessage(it.toString().split('\n')[1])
-                        .create().show()
+        binding.mainTextRecipesTitle.text = "Receptek (${Data.getRecipes().size})"
+        binding.mainComposeRecipes.setContent {
+            Column(Modifier.padding(8.dp)) {
+                Data.getRecipes().map {
+                    RecipeItem(recipe = it)
                 }
-                setOnCloseIconClickListener { _ ->
+            }
+        }
+        findRecipe()
+    }
+
+    @Composable
+    fun RecipeItem(modifier: Modifier = Modifier, recipe: Recipe) {
+        Row(
+            modifier
+                .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f).padding(8.dp)) {
+                Text(text = recipe.name, fontWeight = FontWeight.Medium)
+                Text(text = recipe.ingredients.joinToString(), fontSize = 12.sp)
+            }
+            if (recipe.isRemovable) {
+                IconButton(onClick = {
                     MaterialAlertDialogBuilder(this@MainActivity)
-                        .setTitle(it.name)
+                        .setTitle(recipe.name)
                         .setMessage("Biztos törlöd ezt a receptet?")
                         .setPositiveButton("Igen") { _: DialogInterface, _: Int ->
-                            Data.removeRecipe(this@MainActivity, it)
+                            Data.removeRecipe(this@MainActivity, recipe)
                             loadRecipes()
                         }
                         .setNegativeButton("Nem") { _: DialogInterface, _: Int -> }
                         .create().show()
+                }) {
+                    Image(painter = painterResource(R.drawable.ic_close), contentDescription = "Close button")
                 }
             }
-            mainGroupRecipes.addView(v)
         }
-        findRecipe()
+    }
+
+    @Preview
+    @Composable
+    fun RecipeItemPreview() {
+        RecipeItem(recipe = Recipe(this, "Kólavíz", mutableListOf(Ingredient("kóla"), Ingredient("víz")), true))
     }
 
     fun btnShareClick(view: View) {

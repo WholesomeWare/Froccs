@@ -3,9 +3,9 @@ package com.csakitheone.froccs.data
 import android.app.Activity
 import android.view.View
 import android.widget.SeekBar
+import android.widget.TextView
 import androidx.preference.PreferenceManager
 import com.csakitheone.froccs.R
-import kotlinx.android.synthetic.main.layout_ingredient.view.*
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -31,14 +31,14 @@ class Ingredient() {
     fun createView(activity: Activity, onChangeListener: (ingredientName: String, newAmount: Float) -> Unit) : View {
         val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
         val v = activity.layoutInflater.inflate(R.layout.layout_ingredient, null, false)
-        v.ingredientText.text = name
-        v.ingredientSeek.progress = (amount * AMOUNT_PRECISION).toInt()
-        v.ingredientSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        v.findViewById<TextView>(R.id.ingredientText).text = name
+        v.findViewById<SeekBar>(R.id.ingredientSeek).progress = (amount * AMOUNT_PRECISION).toInt()
+        v.findViewById<SeekBar>(R.id.ingredientSeek).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val currentPrecision = if (prefs.getBoolean("pref_precise_seekbar", false)) 2 else 1
                 amount = progress / AMOUNT_PRECISION.toFloat()
                 amount = (amount * currentPrecision).roundToInt() / currentPrecision.toFloat()
-                v.ingredientText.text = "$name: " +
+                v.findViewById<TextView>(R.id.ingredientText).text = "$name: " +
                         (if (amount == amount.roundToInt().toFloat()) amount.roundToInt() else amount.toString()) +
                         (if (prefs.getBoolean("pref_show_dl", true)) "dl" else "")
                 onChangeListener(name, amount)
@@ -59,6 +59,13 @@ class Ingredient() {
 
     override fun toString(): String {
         return "$name-${(if (amount == amount.roundToInt().toFloat()) amount.roundToInt() else amount.toString())}"
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + amount.hashCode()
+        result = 31 * result + isRemovable.hashCode()
+        return result
     }
 
     companion object {

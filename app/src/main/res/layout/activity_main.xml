@@ -146,7 +146,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -210,13 +211,10 @@
                             android:text="Közösségi receptek a pincében"
                             app:icon="@drawable/ic_barrel" />
 
-                        <com.google.android.material.chip.ChipGroup
-                            android:id="@+id/mainGroupRecipes"
+                        <androidx.compose.ui.platform.ComposeView
+                            android:id="@+id/mainComposeRecipes"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="16dp">
-
-                        </com.google.android.material.chip.ChipGroup>
+                            android:layout_height="wrap_content"/>
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -228,8 +226,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:visibility="gone">
 
                 <Button
                     android:layout_width="match_parent"

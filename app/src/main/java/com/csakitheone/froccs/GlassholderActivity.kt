@@ -2,19 +2,20 @@ package com.csakitheone.froccs
 
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.csakitheone.froccs.databinding.ActivityGlassholderBinding
 import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
-import kotlinx.android.synthetic.main.activity_glassholder.*
 
 
 class GlassholderActivity : AppCompatActivity() {
+    lateinit var binding: ActivityGlassholderBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_glassholder)
+        binding = ActivityGlassholderBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         window.attributes.apply {
             screenBrightness = 1.0f
@@ -22,17 +23,17 @@ class GlassholderActivity : AppCompatActivity() {
 
         hideSystemUI()
 
-        glassholderSeekSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.glassholderSeekSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                glassholderView.radius = progress.toFloat() + 100
-                glassholderView.invalidate()
+                binding.glassholderView.radius = progress.toFloat() + 100
+                binding.glassholderView.invalidate()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
-        glassholderView.radius = glassholderSeekSize.progress.toFloat() + 100
-        glassholderView.invalidate()
+        binding.glassholderView.radius = binding.glassholderSeekSize.progress.toFloat() + 100
+        binding.glassholderView.invalidate()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -53,10 +54,10 @@ class GlassholderActivity : AppCompatActivity() {
         ColorPickerDialogBuilder
                 .with(this)
                 .setTitle("Choose color")
-                .initialColor(glassholderView.color)
+                .initialColor(binding.glassholderView.color)
                 .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                 .density(12)
-                .setPositiveButton("Ok") { _, selectedColor, _ -> glassholderView.updateColor(selectedColor) }
+                .setPositiveButton("Ok") { _, selectedColor, _ -> binding.glassholderView.updateColor(selectedColor) }
                 .setNegativeButton("Mégsem") { _, _ -> }
                 .build()
                 .show()
