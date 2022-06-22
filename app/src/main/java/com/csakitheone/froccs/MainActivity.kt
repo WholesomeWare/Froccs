@@ -283,6 +283,10 @@ class MainActivity : AppCompatActivity() {
             .create().show()
     }
 
+    fun btnGameClick(view: View) {
+        startActivity(Intent(this, GameActivity::class.java))
+    }
+
     fun btnGlassholderClick(view: View) {
         MaterialAlertDialogBuilder(this)
             .setTitle("Pohártartó")

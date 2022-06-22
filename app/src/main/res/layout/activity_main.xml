@@ -146,8 +146,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:visibility="gone">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -214,7 +213,7 @@
                         <androidx.compose.ui.platform.ComposeView
                             android:id="@+id/mainComposeRecipes"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -226,12 +225,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:padding="8dp"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_margin="8dp"
+                    android:onClick="btnGameClick"
+                    android:text="Fröccs app ivós játék" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
                     android:onClick="btnGlassholderClick"
                     android:text="Pohártartó"
                     app:icon="@drawable/ic_glass_wine"
@@ -240,7 +248,7 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_margin="8dp"
                     android:onClick="btnSupportVideoClick"
                     android:text="Fejlesztő támogatása videóval" />
 
