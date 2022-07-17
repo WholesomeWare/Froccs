@@ -17,6 +17,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +35,7 @@ import com.csakitheone.froccs.data.Ingredient
 import com.csakitheone.froccs.data.Recipe
 import com.csakitheone.froccs.databinding.ActivityMainBinding
 import com.csakitheone.froccs.helper.Workshop
+import com.csakitheone.froccs.ui.theme.FroccsTheme
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
@@ -175,9 +179,11 @@ class MainActivity : AppCompatActivity() {
     fun loadRecipes() {
         binding.mainTextRecipesTitle.text = "Receptek (${Data.getRecipes().size})"
         binding.mainComposeRecipes.setContent {
-            Column(Modifier.padding(8.dp)) {
-                Data.getRecipes().map {
-                    RecipeItem(recipe = it)
+            FroccsTheme {
+                Column(Modifier.padding(8.dp)) {
+                    Data.getRecipes().map {
+                        RecipeItem(recipe = it)
+                    }
                 }
             }
         }
@@ -189,23 +195,40 @@ class MainActivity : AppCompatActivity() {
         Row(
             modifier
                 .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.weight(1f).padding(8.dp)) {
-                Text(text = recipe.name, fontWeight = FontWeight.Medium)
-                Text(text = recipe.ingredients.joinToString(), fontSize = 12.sp)
+            Column(
+                Modifier
+                    .weight(1f)
+                    .padding(8.dp)) {
+                Text(
+                    text = recipe.name,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = recipe.ingredients.joinToString(),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
             if (recipe.isRemovable) {
-                IconButton(onClick = {
-                    MaterialAlertDialogBuilder(this@MainActivity)
-                        .setTitle(recipe.name)
-                        .setMessage("Biztos törlöd ezt a receptet?")
-                        .setPositiveButton("Igen") { _: DialogInterface, _: Int ->
-                            Data.removeRecipe(this@MainActivity, recipe)
-                            loadRecipes()
-                        }
-                        .setNegativeButton("Nem") { _: DialogInterface, _: Int -> }
-                        .create().show()
-                }) {
-                    Image(painter = painterResource(R.drawable.ic_close), contentDescription = "Close button")
+                IconButton(
+                    onClick = {
+                        MaterialAlertDialogBuilder(this@MainActivity)
+                            .setTitle(recipe.name)
+                            .setMessage("Biztos törlöd ezt a receptet?")
+                            .setPositiveButton("Igen") { _: DialogInterface, _: Int ->
+                                Data.removeRecipe(this@MainActivity, recipe)
+                                loadRecipes()
+                            }
+                            .setNegativeButton("Nem") { _: DialogInterface, _: Int -> }
+                            .create().show()
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_close),
+                        contentDescription = "Close button",
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             }
         }
