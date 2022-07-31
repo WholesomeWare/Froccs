@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fröccs</string>
+
+    <string name="ingredient_vine">Bor</string>
+    <string name="ingredient_soda">Szóda</string>
+
+    <string name="empty_bottle">Üres üveg</string>
+
+    <!-- Main -->
+    <string name="main_tab_mixing">Ital keverés</string>
+    <string name="main_tab_recipes">Receptek</string>
+    <string name="main_tab_settings">Beállítások</string>
+
+    <!-- Mixing -->
+    <string name="no_recipe_found">Nincs ilyen recept</string>
+
+    <string name="remove_ingredient">Hozzávaló törlése</string>
+    <string name="add_ingredient">Új hozzávaló</string>
+
+    <!-- Recipes -->
+    <string name="cellar">Pince (mások által készített italok)</string>
+
+    <!-- Settings -->
+    <string name="precise_sliders">Pontosabb csúszkák</string>
+
+    <!-- Glassholder -->
+    <string name="glassholder">Pohártartó</string>
+    <string name="glassholder_warning">Ezt a funkciót csak kisebb poharakkal érdemes használni és légy nagyon óvatos, hogy a telefon sértetlen maradjon! Csak akkor használd a pohártartót, ha vállalod a következményeket!</string>
+</resources>

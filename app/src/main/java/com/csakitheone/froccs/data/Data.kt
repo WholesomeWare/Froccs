@@ -2,6 +2,7 @@ package com.csakitheone.froccs.data
 
 import android.content.Context
 import androidx.preference.PreferenceManager
+import com.csakitheone.froccs.R
 
 class Data {
     companion object {
@@ -11,10 +12,10 @@ class Data {
 
         private fun loadFirst() {
             ingredients = mutableListOf()
+            ingredients.add(Ingredient(name = context.getString(R.string.ingredient_vine), isRemovable = false))
+            ingredients.add(Ingredient(name = context.getString(R.string.ingredient_soda), isRemovable = false))
             recipes = mutableListOf()
-            ingredients.add(Ingredient("bor", 0F, false))
-            ingredients.add(Ingredient("szóda", 0F, false))
-            recipes.add(Recipe(context, "Üres üveg", mutableListOf(), false))
+            recipes.add(Recipe(context, context.getString(R.string.empty_bottle), mutableListOf(), false))
             addSplatter("Kisfröccs", 1F, 1F)
             addSplatter("Nagyfröccs", 2F, 1F)
             addSplatter("Hosszúlépés", 1F, 2F)
@@ -41,11 +42,11 @@ class Data {
         }
 
         fun loadUserData(context: Context) {
-            this.context = context
+            this.context = context.applicationContext
             loadFirst()
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             ingredients.addAll(prefs.getStringSet("ingredients", setOf())
-                ?.map { r -> Ingredient(r) } ?: listOf())
+                ?.map { r -> Ingredient(r, true) } ?: listOf())
             for (ing in ingredients) {
                 ing.amount = 0F
             }
@@ -57,13 +58,13 @@ class Data {
             return ingredients
         }
 
-        fun addIngredient(context: Context, ingredient: Ingredient) {
-            ingredients.add(ingredient)
+        fun addIngredient(context: Context, ingredientName: String) {
+            ingredients.add(Ingredient(name = ingredientName, isRemovable = true))
             save(context)
         }
 
-        fun removeIngredient(context: Context, ingredient: Ingredient) {
-            ingredients.remove(ingredient)
+        fun removeIngredient(context: Context, ingredientName: String) {
+            ingredients.removeAll { it.name == ingredientName }
             save(context)
         }
 
@@ -81,8 +82,8 @@ class Data {
             save(context)
         }
 
-        private fun addSplatter(name: String, wine: Float, water: Float) {
-            recipes.add(Recipe(context, name, mutableListOf(Ingredient("bor", wine), Ingredient("szóda", water)), false))
+        private fun addSplatter(name: String, wine: Float, soda: Float) {
+            recipes.add(Recipe(context, name, mutableListOf(Ingredient(context.getString(R.string.ingredient_vine), wine, false), Ingredient(context.getString(R.string.ingredient_soda), soda, false)), false))
         }
 
         private fun save(context: Context) {

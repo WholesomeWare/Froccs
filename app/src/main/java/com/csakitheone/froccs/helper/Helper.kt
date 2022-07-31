@@ -2,15 +2,16 @@ package com.csakitheone.froccs.helper
 
 import android.content.Context
 import android.util.DisplayMetrics
+import com.csakitheone.froccs.data.Prefs
+import kotlin.math.roundToInt
 
 class Helper {
     companion object {
-        fun convertDpToPixel(dp: Float, context: Context): Float {
-            return dp * (context.resources.displayMetrics.densityDpi as Float / DisplayMetrics.DENSITY_DEFAULT)
+
+        fun Float.roundToPreference(): Float {
+            return if (Prefs.preciseSliders) (this * 20).roundToInt() / 2f
+            else (this * 10).roundToInt().toFloat()
         }
 
-        fun convertPixelsToDp(px: Float, context: Context): Float {
-            return px / (context.resources.displayMetrics.densityDpi as Float / DisplayMetrics.DENSITY_DEFAULT)
-        }
     }
 }

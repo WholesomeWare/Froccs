@@ -11,21 +11,21 @@ import kotlin.math.roundToInt
 
 class Ingredient() {
     var name: String = ""
-    var amount: Float = 0F
+    var amount: Float = 0f
     var isRemovable: Boolean = true
 
-    constructor(name: String, amount: Float, isRemovable: Boolean = true) : this() {
+    constructor(name: String, amount: Float = 0f, isRemovable: Boolean) : this() {
         this.name = name
         this.amount = amount
         this.isRemovable = isRemovable
     }
 
-    constructor(text: String, isRemovable: Boolean = true) : this() {
+    constructor(text: String, isRemovable: Boolean) : this() {
         this.name = text.split('-')[0]
         if (text.contains('-')) {
             this.amount = text.split('-')[1].toFloat()
         }
-        this.isRemovable = true
+        this.isRemovable = isRemovable
     }
 
     fun createView(activity: Activity, onChangeListener: (ingredientName: String, newAmount: Float) -> Unit) : View {

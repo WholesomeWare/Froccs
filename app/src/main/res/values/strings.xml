@@ -1,7 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Fröccs</string>
-    <string name="title_activity_glassholder">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_activity_game">GameActivity</string>
+
+    <string name="ingredient_vine">Vine</string>
+    <string name="ingredient_soda">Soda</string>
+
+    <string name="empty_bottle">Empty bottle</string>
+
+    <!-- Main -->
+    <string name="main_tab_mixing">dummy</string>
+    <string name="main_tab_recipes">Recipes</string>
+    <string name="main_tab_settings">Settings</string>
+
+    <!-- Mixing -->
+    <string name="no_recipe_found">No recipe found</string>
+
+    <string name="remove_ingredient">Remove ingredient</string>
+    <string name="add_ingredient">Add ingredient</string>
+
+    <!-- Recipes -->
+    <string name="cellar">Cellar (user created drinks)</string>
+
+    <!-- Settings -->
+    <string name="precise_sliders">dummy</string>
+
+    <!-- Glassholder -->
+    <string name="glassholder">dummy</string>
+    <string name="glassholder_warning">dummy</string>
 </resources>

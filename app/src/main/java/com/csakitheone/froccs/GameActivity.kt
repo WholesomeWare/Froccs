@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.csakitheone.froccs.ui.theme.FroccsTheme
+import com.csakitheone.froccs.ui.theme.FröccsTheme
 import java.util.*
 import kotlin.concurrent.timerTask
 import kotlin.math.abs
@@ -35,7 +35,7 @@ class GameActivity : ComponentActivity() {
             var gameState by remember { mutableStateOf(STATE_MENU) }
             var gameDifficulty by remember { mutableStateOf(DIFFICULTY_EASY) }
 
-            FroccsTheme {
+            FröccsTheme {
                 when (gameState) {
                     STATE_MENU -> GameMenu(onGameStart = {
                         gameState = STATE_PLAYING
