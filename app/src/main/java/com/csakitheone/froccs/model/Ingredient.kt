@@ -1,4 +1,4 @@
-package com.csakitheone.froccs.data
+package com.csakitheone.froccs.model
 
 import android.app.Activity
 import android.view.View

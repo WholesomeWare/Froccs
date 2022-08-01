@@ -3,6 +3,8 @@ package com.csakitheone.froccs.data
 import android.content.Context
 import androidx.preference.PreferenceManager
 import com.csakitheone.froccs.R
+import com.csakitheone.froccs.model.Ingredient
+import com.csakitheone.froccs.model.Recipe
 
 class Data {
     companion object {

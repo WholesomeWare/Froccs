@@ -22,13 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.children
 import androidx.preference.PreferenceManager
 import com.csakitheone.froccs.data.Data
-import com.csakitheone.froccs.data.Ingredient
-import com.csakitheone.froccs.data.Recipe
+import com.csakitheone.froccs.model.Ingredient
+import com.csakitheone.froccs.model.Recipe
 import com.csakitheone.froccs.databinding.ActivityMainBinding
 import com.csakitheone.froccs.helper.Workshop
 import com.csakitheone.froccs.ui.theme.FröccsTheme

@@ -14,12 +14,15 @@
 
     <!-- Mixing -->
     <string name="no_recipe_found">No recipe found</string>
-
+    <string name="add_recipe">Add recipe</string>
     <string name="remove_ingredient">Remove ingredient</string>
     <string name="add_ingredient">Add ingredient</string>
 
-    <!-- Recipes -->
-    <string name="cellar">Cellar (user created drinks)</string>
+    <string name="add_to_cellar">dummy</string>
+
+    <!-- Cellar -->
+    <string name="cellar">Cellar</string>
+    <string name="user_created_drinks">User created drinks</string>
 
     <!-- Settings -->
     <string name="precise_sliders">dummy</string>

@@ -1,6 +1,10 @@
 package com.csakitheone.froccs.ui.components
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.pm.LabeledIntent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,13 +27,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.csakitheone.froccs.CellarActivity
+import com.csakitheone.froccs.MainActivity
 import com.csakitheone.froccs.R
 import com.csakitheone.froccs.data.Data
-import com.csakitheone.froccs.data.Ingredient
-import com.csakitheone.froccs.data.Recipe
+import com.csakitheone.froccs.data.Temp
+import com.csakitheone.froccs.model.Ingredient
+import com.csakitheone.froccs.model.Recipe
 import com.csakitheone.froccs.helper.Helper.Companion.roundToPreference
 import kotlin.math.min
-import kotlin.math.roundToInt
 
 @Preview
 @Composable
@@ -37,10 +43,10 @@ fun MixingScreen() {
     val context = LocalContext.current
 
     var ingredients by remember { mutableStateOf(Data.getIngredients(), neverEqualPolicy()) }
-    var recipe: Recipe by remember { mutableStateOf(Data.getRecipes().first()) }
+    var recipe: Recipe? by remember { mutableStateOf(Data.getRecipes().firstOrNull()) }
     var amounts by remember { mutableStateOf(mutableMapOf<String, Float>(), neverEqualPolicy()) }
 
-    fun getAmountAsDl(): Float = amounts.values.sum().roundToPreference()
+    fun getAmountAsDl(): Float = amounts.values.map { it.roundToPreference() }.sum()
 
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -58,7 +64,7 @@ fun MixingScreen() {
                 ) {
                     Text(
                         modifier = Modifier.padding(8.dp),
-                        text = recipe.name,
+                        text = recipe?.name ?: "",
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     Text(
@@ -66,24 +72,60 @@ fun MixingScreen() {
                         text = "${getAmountAsDl()}dl",
                         color = MaterialTheme.colorScheme.onBackground
                     )
+                    AnimatedVisibility(
+                        visible = recipe?.name == stringResource(id = R.string.no_recipe_found)
+                    ) {
+                        Button(
+                            onClick = { /*TODO add*/ }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = null
+                            )
+                            Text(text = stringResource(id = R.string.add_recipe))
+                        }
+                    }
+                    AnimatedVisibility(
+                        visible = !recipe?.ingredients.isNullOrEmpty() && recipe?.name != stringResource(id = R.string.no_recipe_found)
+                    ) {
+                        Button(
+                            onClick = {
+                                Temp.selectedRecipe = recipe
+
+                                val intent = Intent(Intent.ACTION_SEND)
+                                    .putExtra(Intent.EXTRA_TEXT, recipe.toString())
+                                    .putExtra(Intent.EXTRA_TITLE, recipe.toString())
+                                    .setType("text/plain")
+                                val targets = arrayListOf(
+                                    LabeledIntent(
+                                        Intent(context, CellarActivity::class.java)
+                                            .putExtra(Intent.EXTRA_TEXT, recipe.toString())
+                                            .putExtra(Intent.EXTRA_SUBJECT, "Add to Cellar")
+                                            .setType("text/plain"),
+                                        context.packageName,
+                                        R.string.add_to_cellar,
+                                        R.drawable.ic_barrel
+                                    )
+                                ).toTypedArray()
+                                context.startActivity(
+                                    Intent
+                                        .createChooser(intent, null)
+                                        .putExtra(Intent.EXTRA_INITIAL_INTENTS, targets)
+                                )
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Share,
+                                contentDescription = null
+                            )
+                        }
+                    }
                 }
-                VineBottle(modifier = Modifier.weight(1f).padding(8.dp), fullness = amounts.values.sum())
+                VineBottle(modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp), fullness = amounts.values.sum())
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                IconButton(
-                    onClick = { /*TODO share*/ }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Share,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-            Divider()
+            Divider(modifier = Modifier.padding(16.dp))
         }
         items(items = ingredients) { ingredient ->
             IngredientSlider(
@@ -226,9 +268,9 @@ fun AddIngredientButton(onRefreshRequest: () -> Unit) {
     }
 }
 
-fun findRecipe(context: Context, amounts: MutableMap<String, Float>) : Recipe {
+fun findRecipe(context: Context, amounts: MutableMap<String, Float>): Recipe {
     val ingredients = amounts
-        .filter { it.value > 0 }
+        .filter { it.value.roundToPreference() >= .5f }
         .map { Ingredient(it.key, it.value.roundToPreference(), false) }
 
     if (ingredients.size == 1) {

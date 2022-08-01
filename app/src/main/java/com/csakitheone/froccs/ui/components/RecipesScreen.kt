@@ -1,10 +1,9 @@
 package com.csakitheone.froccs.ui.components
 
-import android.widget.Toast
+import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,13 +16,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.csakitheone.froccs.CellarActivity
 import com.csakitheone.froccs.R
 import com.csakitheone.froccs.data.Data
-import com.csakitheone.froccs.data.Recipe
+import com.csakitheone.froccs.model.Recipe
 
 @Preview
 @Composable
 fun RecipesScreen() {
+    val context = LocalContext.current
+
     var recipes by remember {
         mutableStateOf(Data.getRecipes().filter { it.ingredients.isNotEmpty() }, neverEqualPolicy())
     }
@@ -35,7 +37,7 @@ fun RecipesScreen() {
                     .padding(8.dp)
                     .fillMaxWidth(),
                 onClick = {
-                    //TODO
+                    context.startActivity(Intent(context, CellarActivity::class.java))
                 }
             ) {
                 Icon(painter = painterResource(id = R.drawable.ic_barrel), contentDescription = null)
@@ -46,49 +48,6 @@ fun RecipesScreen() {
             RecipeView(
                 recipe = recipe,
                 onRefreshRequest = { recipes = Data.getRecipes().filter { it.ingredients.isNotEmpty() } }
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun RecipeView(recipe: Recipe, onRefreshRequest: () -> Unit) {
-    val context = LocalContext.current
-
-    var isMenuVisible by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .combinedClickable(
-                onClick = {},
-                onLongClick = {
-                    if (recipe.isRemovable) isMenuVisible = true
-                }
-            )
-    ) {
-        Text(
-            modifier = Modifier.padding(2.dp),
-            text = recipe.name,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        Text(
-            modifier = Modifier.padding(2.dp),
-            text = recipe.getIngredientsString(),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        DropdownMenu(expanded = isMenuVisible, onDismissRequest = { isMenuVisible = false }) {
-            DropdownMenuItem(
-                text = { Text(text = stringResource(id = R.string.remove_ingredient)) },
-                onClick = {
-                    Data.removeRecipe(context, recipe)
-                    isMenuVisible = false
-                    onRefreshRequest()
-                }
             )
         }
     }

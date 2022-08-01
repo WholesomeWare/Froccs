@@ -14,12 +14,15 @@
 
     <!-- Mixing -->
     <string name="no_recipe_found">Nincs ilyen recept</string>
-
+    <string name="add_recipe">Új recept</string>
     <string name="remove_ingredient">Hozzávaló törlése</string>
     <string name="add_ingredient">Új hozzávaló</string>
 
-    <!-- Recipes -->
-    <string name="cellar">Pince (mások által készített italok)</string>
+    <string name="add_to_cellar">Hozzáadás a pincéhez</string>
+
+    <!-- Cellar -->
+    <string name="cellar">Pince</string>
+    <string name="user_created_drinks">Mások által készített italok</string>
 
     <!-- Settings -->
     <string name="precise_sliders">Pontosabb csúszkák</string>

@@ -2,10 +2,7 @@ package com.csakitheone.froccs.ui.components
 
 import android.content.Intent
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -92,15 +89,23 @@ fun LabeledSwitch(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
-    Row(
+    Box(
         modifier = Modifier
-            .padding(8.dp)
             .clickable {
                 onCheckedChange(!checked)
-            },
-        verticalAlignment = Alignment.CenterVertically
+            }
     ) {
-        Text(modifier = Modifier.weight(1f), text = label, color = MaterialTheme.colorScheme.onBackground)
-        Switch(checked = checked, onCheckedChange = onCheckedChange)
+        Row(
+            modifier = Modifier
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = label,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Switch(checked = checked, onCheckedChange = onCheckedChange)
+        }
     }
 }

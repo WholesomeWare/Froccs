@@ -1,4 +1,4 @@
-package com.csakitheone.froccs.data
+package com.csakitheone.froccs.model
 
 import android.content.Context
 import androidx.preference.PreferenceManager
