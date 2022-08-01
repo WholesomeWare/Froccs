@@ -15,8 +15,9 @@
     <!-- Mixing -->
     <string name="no_recipe_found">No recipe found</string>
     <string name="add_recipe">Add recipe</string>
-    <string name="remove_ingredient">Remove ingredient</string>
+    <string name="remove_recipe">Remove recipe</string>
     <string name="add_ingredient">Add ingredient</string>
+    <string name="remove_ingredient">Remove ingredient</string>
 
     <string name="add_to_cellar">dummy</string>
 
@@ -30,4 +31,5 @@
     <!-- Glassholder -->
     <string name="glassholder">dummy</string>
     <string name="glassholder_warning">dummy</string>
+    <string name="put_your_glass_here">dummy</string>
 </resources>

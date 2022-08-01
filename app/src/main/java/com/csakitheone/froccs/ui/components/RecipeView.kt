@@ -54,7 +54,7 @@ fun RecipeView(recipe: Recipe, onRefreshRequest: () -> Unit = {}) {
 
             DropdownMenu(expanded = isMenuVisible, onDismissRequest = { isMenuVisible = false }) {
                 DropdownMenuItem(
-                    text = { Text(text = stringResource(id = R.string.remove_ingredient)) },
+                    text = { Text(text = stringResource(id = R.string.remove_recipe)) },
                     onClick = {
                         Data.removeRecipe(context, recipe)
                         isMenuVisible = false

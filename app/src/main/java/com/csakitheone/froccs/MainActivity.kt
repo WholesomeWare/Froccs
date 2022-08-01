@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
-    @Preview
+    @Preview(showBackground = true)
     @Composable
     fun MainScreen() {
         var selectedTab by remember { mutableStateOf(0) }
@@ -61,16 +61,7 @@ class MainActivity : ComponentActivity() {
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         titleContentColor = MaterialTheme.colorScheme.onPrimary
-                    ),
-                    actions = {
-                        Button(
-                            onClick = {
-                                startActivity(Intent(this@MainActivity, MainActivityOld::class.java))
-                            }
-                        ) {
-                            Text(text = "Legacy layout")
-                        }
-                    }
+                    )
                 )
 
                 Box(
@@ -80,7 +71,7 @@ class MainActivity : ComponentActivity() {
                         when (tab) {
                             0 -> MixingScreen()
                             1 -> RecipesScreen()
-                            2 -> SettingsScreen()
+                            2 -> SettingsScreen(this@MainActivity)
                         }
                     }
                 }

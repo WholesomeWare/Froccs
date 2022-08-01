@@ -1,11 +1,5 @@
 package com.csakitheone.froccs.model
 
-import android.app.Activity
-import android.view.View
-import android.widget.SeekBar
-import android.widget.TextView
-import androidx.preference.PreferenceManager
-import com.csakitheone.froccs.R
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -28,27 +22,6 @@ class Ingredient() {
         this.isRemovable = isRemovable
     }
 
-    fun createView(activity: Activity, onChangeListener: (ingredientName: String, newAmount: Float) -> Unit) : View {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
-        val v = activity.layoutInflater.inflate(R.layout.layout_ingredient, null, false)
-        v.findViewById<TextView>(R.id.ingredientText).text = name
-        v.findViewById<SeekBar>(R.id.ingredientSeek).progress = (amount * AMOUNT_PRECISION).toInt()
-        v.findViewById<SeekBar>(R.id.ingredientSeek).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val currentPrecision = if (prefs.getBoolean("pref_precise_seekbar", false)) 2 else 1
-                amount = progress / AMOUNT_PRECISION.toFloat()
-                amount = (amount * currentPrecision).roundToInt() / currentPrecision.toFloat()
-                v.findViewById<TextView>(R.id.ingredientText).text = "$name: " +
-                        (if (amount == amount.roundToInt().toFloat()) amount.roundToInt() else amount.toString()) +
-                        (if (prefs.getBoolean("pref_show_dl", true)) "dl" else "")
-                onChangeListener(name, amount)
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) { }
-            override fun onStopTrackingTouch(seekBar: SeekBar?) { }
-        })
-        return v
-    }
-
     fun copy() : Ingredient {
         return Ingredient(name, amount, isRemovable)
     }
@@ -66,9 +39,5 @@ class Ingredient() {
         result = 31 * result + amount.hashCode()
         result = 31 * result + isRemovable.hashCode()
         return result
-    }
-
-    companion object {
-        val AMOUNT_PRECISION: Int = 10
     }
 }

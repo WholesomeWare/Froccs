@@ -75,15 +75,7 @@ fun MixingScreen() {
                     AnimatedVisibility(
                         visible = recipe?.name == stringResource(id = R.string.no_recipe_found)
                     ) {
-                        Button(
-                            onClick = { /*TODO add*/ }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = null
-                            )
-                            Text(text = stringResource(id = R.string.add_recipe))
-                        }
+                        AddRecipeButton(amounts)
                     }
                     AnimatedVisibility(
                         visible = !recipe?.ingredients.isNullOrEmpty() && recipe?.name != stringResource(id = R.string.no_recipe_found)
@@ -163,7 +155,7 @@ fun VineBottle(modifier: Modifier = Modifier, fullness: Float = 1f) {
         ) {
             Box(
                 modifier = Modifier
-                    .padding(start = 48.dp, end = 48.dp, top = 44.dp, bottom = 18.dp)
+                    .padding(start = 48.dp, end = 48.dp, top = 42.dp, bottom = 18.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(MaterialTheme.colorScheme.secondary)
                     .fillMaxWidth()
@@ -227,6 +219,51 @@ fun IngredientSlider(
                 }
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddRecipeButton(amounts: MutableMap<String, Float>) {
+    val context = LocalContext.current
+    val ingredients = amounts
+        .filter { it.value.roundToPreference() >= .5f }
+        .map { Ingredient(it.key, it.value.roundToPreference(), false) }
+        .toMutableList()
+
+    var isDialogVisible by remember { mutableStateOf(false) }
+    var recipeName by remember { mutableStateOf("") }
+
+    Button(
+        onClick = { isDialogVisible = true }
+    ) {
+        Icon(
+            imageVector = Icons.Default.Add,
+            contentDescription = null
+        )
+        Text(text = stringResource(id = R.string.add_recipe))
+    }
+
+    if (isDialogVisible) {
+        AlertDialog(
+            title = { Text(text = stringResource(id = R.string.add_recipe)) },
+            text = {
+                TextField(value = recipeName, onValueChange = { recipeName = it })
+            },
+            onDismissRequest = { isDialogVisible = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        val recipe = Recipe(context, recipeName, ingredients, true)
+                        Data.addRecipe(context, recipe)
+                        isDialogVisible = false
+                        recipeName = ""
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.add_recipe))
+                }
+            }
+        )
     }
 }
 

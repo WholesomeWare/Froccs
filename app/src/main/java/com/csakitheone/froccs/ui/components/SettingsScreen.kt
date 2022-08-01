@@ -1,5 +1,6 @@
 package com.csakitheone.froccs.ui.components
 
+import android.app.Activity
 import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,7 +25,7 @@ import com.csakitheone.froccs.data.Prefs
 
 @Preview
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(activity: Activity? = null) {
     var preciseSliders: Boolean by remember { mutableStateOf(Prefs.preciseSliders) }
 
     Column(
@@ -33,6 +34,8 @@ fun SettingsScreen() {
             .padding(8.dp)
     ) {
         GlassholderButton()
+
+        SupportDeveloperLayout(activity)
 
         LabeledSwitch(
             label = stringResource(id = R.string.precise_sliders),
