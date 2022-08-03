@@ -118,7 +118,9 @@ fun MixingScreen() {
                     .weight(1f)
                     .padding(8.dp), fullness = amounts.values.sum())
             }
-            Divider(modifier = Modifier.padding(16.dp).alpha(.5f))
+            Divider(modifier = Modifier
+                .padding(16.dp)
+                .alpha(.5f))
         }
         items(items = ingredients) { ingredient ->
             IngredientSlider(
@@ -184,10 +186,8 @@ fun IngredientSlider(
 
     var isMenuVisible by remember { mutableStateOf(false) }
 
-    Column(
+    Box(
         modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth()
             .combinedClickable(
                 onClick = {},
                 onLongClick = {
@@ -195,30 +195,39 @@ fun IngredientSlider(
                 }
             )
     ) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(
-                text = label,
-                color = MaterialTheme.colorScheme.onBackground
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = label,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = "${amount.roundToPreference()}dl",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+            Slider(
+                value = amount,
+                onValueChange = onAmountChange
             )
-            Text(
-                text = "${amount.roundToPreference()}dl",
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        }
-        Slider(
-            value = amount,
-            onValueChange = onAmountChange
-        )
 
-        DropdownMenu(expanded = isMenuVisible, onDismissRequest = { isMenuVisible = false }) {
-            DropdownMenuItem(
-                text = { Text(text = stringResource(id = R.string.remove_ingredient)) },
-                onClick = {
-                    Data.removeIngredient(context, label)
-                    isMenuVisible = false
-                    onRefreshRequest()
-                }
-            )
+            DropdownMenu(expanded = isMenuVisible, onDismissRequest = { isMenuVisible = false }) {
+                DropdownMenuItem(
+                    text = { Text(text = stringResource(id = R.string.remove_ingredient)) },
+                    onClick = {
+                        Data.removeIngredient(context, label)
+                        isMenuVisible = false
+                        onRefreshRequest()
+                    }
+                )
+            }
         }
     }
 }

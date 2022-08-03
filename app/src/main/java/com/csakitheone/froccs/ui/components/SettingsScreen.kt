@@ -94,12 +94,11 @@ fun LabeledSwitch(
 ) {
     Box(
         modifier = Modifier
-            .padding(8.dp)
             .clickable {
                 onCheckedChange(!checked)
             }
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(
                 modifier = Modifier.weight(1f),
                 text = label,
