@@ -30,6 +30,8 @@ import com.csakitheone.froccs.ui.theme.FröccsTheme
 import com.google.android.gms.ads.*
 
 class MainActivity : ComponentActivity() {
+    val DEMO_MODE = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -76,7 +78,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                if (!LocalInspectionMode.current) {
+                if (!LocalInspectionMode.current && !DEMO_MODE) {
                     AndroidView(
                         modifier = Modifier.fillMaxWidth(),
                         factory = {
