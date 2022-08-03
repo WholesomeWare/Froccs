@@ -6,6 +6,7 @@ import kotlin.math.roundToInt
 
 class Recipe(val context: Context) {
     var name: String = ""
+    var englishName: String = ""
     var ingredients: MutableList<Ingredient> = mutableListOf()
     var isRemovable: Boolean = true
 
@@ -25,6 +26,7 @@ class Recipe(val context: Context) {
 
     fun getIngredientsString(): String {
         return ingredients.joinToString { "${it.name}: ${it.amount}dl" }
+            .replace(".0", "")
     }
 
     fun getSize(): Float {
@@ -65,6 +67,11 @@ class Recipe(val context: Context) {
 
         fun setName(name: String): Builder {
             recipe.name = name
+            return this
+        }
+
+        fun setEnglishName(name: String): Builder {
+            recipe.englishName = name
             return this
         }
 

@@ -1,21 +1,14 @@
 package com.csakitheone.froccs
 
 import android.os.Bundle
-import android.view.View
-import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowInsetsController
-import android.widget.SeekBar
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material3.Icon
@@ -37,14 +30,14 @@ import com.csakitheone.froccs.ui.theme.FröccsTheme
 import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 
-class GlassholderActivity : AppCompatActivity() {
+class CoasterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         window.attributes.screenBrightness = 1.0f
 
         setContent {
-            GlassholderScreen()
+            CoasterScreen()
         }
 
         hideSystemUI()
@@ -52,7 +45,7 @@ class GlassholderActivity : AppCompatActivity() {
 
     @Preview
     @Composable
-    fun GlassholderScreen() {
+    fun CoasterScreen() {
         var selectedColor by remember { mutableStateOf(Color.Green) }
 
         FröccsTheme {
@@ -60,7 +53,7 @@ class GlassholderActivity : AppCompatActivity() {
                 modifier = Modifier.background(Color.Black),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Glassholder(
+                Coaster(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
@@ -70,7 +63,7 @@ class GlassholderActivity : AppCompatActivity() {
                 IconButton(
                     onClick = {
                         ColorPickerDialogBuilder
-                            .with(this@GlassholderActivity)
+                            .with(this@CoasterActivity)
                             .initialColor(selectedColor.toArgb())
                             .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
                             .showAlphaSlider(false)
@@ -100,7 +93,7 @@ class GlassholderActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun Glassholder(modifier: Modifier, color: Color, minimumSize: Float = 80f) {
+    fun Coaster(modifier: Modifier, color: Color, minimumSize: Float = 80f) {
         var scale by remember { mutableStateOf(minimumSize + 100f) }
 
         Box(modifier = modifier, contentAlignment = Alignment.Center) {

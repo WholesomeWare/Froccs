@@ -41,7 +41,7 @@ fun RecipesScreen() {
                 }
             ) {
                 Icon(painter = painterResource(id = R.drawable.ic_barrel), contentDescription = null)
-                Text(text = stringResource(id = R.string.cellar))
+                Text(text = stringResource(id = R.string.cellar) + ": " + stringResource(id = R.string.user_created_drinks))
             }
         }
         items(items = recipes) { recipe ->

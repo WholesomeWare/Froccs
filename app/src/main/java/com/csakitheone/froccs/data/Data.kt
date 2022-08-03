@@ -18,29 +18,29 @@ class Data {
             ingredients.add(Ingredient(name = context.getString(R.string.ingredient_soda), isRemovable = false))
             recipes = mutableListOf()
             recipes.add(Recipe(context, context.getString(R.string.empty_bottle), mutableListOf(), false))
-            addSplatter("Kisfröccs", 1F, 1F)
-            addSplatter("Nagyfröccs", 2F, 1F)
-            addSplatter("Hosszúlépés", 1F, 2F)
-            addSplatter("Háziúr / Bivalycsók", 4F, 1F)
-            addSplatter("Házmester", 3F, 2F)
-            addSplatter("Viceházmester", 2F, 3F)
-            addSplatter("Sportfröccs", 1F, 4F)
-            addSplatter("Krúdy fröccs", 9F, 1F)
-            addSplatter("Avasi fröccs", 7F, 3F)
-            addSplatter("Polgármester", 6F, 4F)
-            addSplatter("Maflás", 5F, 5F)
-            addSplatter("Alpolgármester", 4F, 6F)
-            addSplatter("Sóherfröccs / Távolugrás", 1F, 9F)
+            addSpritzer("Kisfröccs", "Small spritzer", 1F, 1F)
+            addSpritzer("Nagyfröccs", "Big spritzer", 2F, 1F)
+            addSpritzer("Hosszúlépés", "Long step", 1F, 2F)
+            addSpritzer("Háziúr / Bivalycsók", "", 4F, 1F)
+            addSpritzer("Házmester", "", 3F, 2F)
+            addSpritzer("Viceházmester", "", 2F, 3F)
+            addSpritzer("Sportfröccs", "Sport spritzer", 1F, 4F)
+            addSpritzer("Krúdy fröccs", "", 9F, 1F)
+            addSpritzer("Avasi fröccs", "", 7F, 3F)
+            addSpritzer("Polgármester", "Mayor", 6F, 4F)
+            addSpritzer("Maflás", "", 5F, 5F)
+            addSpritzer("Alpolgármester", "Deputy mayor", 4F, 6F)
+            addSpritzer("Sóherfröccs / Távolugrás", "", 1F, 9F)
 
-            addSplatter("Kisharapás (Cecéről)", .5F, .5F)
-            addSplatter("Háp-háp (Fehérvárról)", 2F, 2F)
-            addSplatter("Előrelépés", 8F, 1F)
-            addSplatter("Puskás fröccs / Magyar-angol", 6F, 3F)
-            addSplatter("Góré föccs (pohár bor és egy spriccentésnyi szóda)", 2F, .5F)
-            addSplatter("Deák föccs (pohár szóda és egy csepp bor)", .5F, 2F)
-            addSplatter("Ijesztett / Spricc föccs (sok bor és egy spriccentésnyi szóda)", 9.5F, .5F)
+            addSpritzer("Kisharapás (Cecéről)", "Small bite", .5F, .5F)
+            addSpritzer("Háp-háp (Fehérvárról)", "Quack-quack", 2F, 2F)
+            addSpritzer("Előrelépés", "Step forward", 8F, 1F)
+            addSpritzer("Puskás fröccs / Magyar-angol", "Puskás spritzer / Hungary-england", 6F, 3F)
+            addSpritzer("Góré föccs (pohár bor és egy spriccentésnyi szóda)", "", 2F, .5F)
+            addSpritzer("Deák föccs (pohár szóda és egy csepp bor)", "", .5F, 2F)
+            addSpritzer("Ijesztett / Spricc föccs (sok bor és egy spriccentésnyi szóda)", "", 9.5F, .5F)
 
-            addSplatter("Csatos", 10F, 5F)
+            addSpritzer("Csatos", "", 10F, 5F)
         }
 
         fun loadUserData(context: Context) {
@@ -84,8 +84,11 @@ class Data {
             save(context)
         }
 
-        private fun addSplatter(name: String, wine: Float, soda: Float) {
-            recipes.add(Recipe(context, name, mutableListOf(Ingredient(context.getString(R.string.ingredient_vine), wine, false), Ingredient(context.getString(R.string.ingredient_soda), soda, false)), false))
+        private fun addSpritzer(name: String, englishName: String, wine: Float, soda: Float) {
+            recipes.add(
+                Recipe(context, name, mutableListOf(Ingredient(context.getString(R.string.ingredient_vine), wine, false), Ingredient(context.getString(R.string.ingredient_soda), soda, false)), false)
+                    .apply { this.englishName = englishName }
+            )
         }
 
         private fun save(context: Context) {

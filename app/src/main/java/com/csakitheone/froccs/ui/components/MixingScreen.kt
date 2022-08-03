@@ -20,6 +20,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
@@ -117,7 +118,7 @@ fun MixingScreen() {
                     .weight(1f)
                     .padding(8.dp), fullness = amounts.values.sum())
             }
-            Divider(modifier = Modifier.padding(16.dp))
+            Divider(modifier = Modifier.padding(16.dp).alpha(.5f))
         }
         items(items = ingredients) { ingredient ->
             IngredientSlider(

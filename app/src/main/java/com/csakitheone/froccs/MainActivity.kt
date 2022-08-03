@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
 
         MobileAds.setRequestConfiguration(
             RequestConfiguration.Builder()
-                .setTestDeviceIds(listOf("A95A3A512D1FE5693AE2EF06BAFC5E42"))
+                .setTestDeviceIds(listOf("FB727C3E2E7E37FB1BCB7C55C84A9993"))
                 .build()
         )
         MobileAds.initialize(this)

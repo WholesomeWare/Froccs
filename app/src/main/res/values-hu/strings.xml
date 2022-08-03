@@ -8,7 +8,7 @@
     <string name="empty_bottle">Üres üveg</string>
 
     <!-- Main -->
-    <string name="main_tab_mixing">Ital keverés</string>
+    <string name="main_tab_mixing">Keverj egy italt</string>
     <string name="main_tab_recipes">Receptek</string>
     <string name="main_tab_settings">Beállítások</string>
 
@@ -28,8 +28,8 @@
     <!-- Settings -->
     <string name="precise_sliders">Pontosabb csúszkák</string>
 
-    <!-- Glassholder -->
-    <string name="glassholder">Pohártartó</string>
-    <string name="glassholder_warning">Ezt a funkciót csak kisebb poharakkal érdemes használni és légy nagyon óvatos, hogy a telefon sértetlen maradjon! Csak akkor használd a pohártartót, ha vállalod a következményeket!</string>
+    <!-- Coaster -->
+    <string name="coaster">Pohártartó</string>
+    <string name="coaster_warning">Ezt a funkciót csak kisebb poharakkal érdemes használni és légy nagyon óvatos, hogy a telefon sértetlen maradjon! Csak akkor használd a pohártartót, ha vállalod a következményeket!</string>
     <string name="put_your_glass_here">Tedd ide a poharad</string>
 </resources>

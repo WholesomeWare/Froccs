@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.csakitheone.froccs.GlassholderActivity
+import com.csakitheone.froccs.CoasterActivity
 import com.csakitheone.froccs.R
 import com.csakitheone.froccs.data.Prefs
 
@@ -64,18 +64,18 @@ fun GlassholderButton() {
         }
     ) {
         Icon(painter = painterResource(id = R.drawable.ic_glass_wine), contentDescription = null)
-        Text(text = stringResource(id = R.string.glassholder))
+        Text(text = stringResource(id = R.string.coaster))
     }
 
     if (isDialogVisible) {
         AlertDialog(
-            title = { Text(text = stringResource(id = R.string.glassholder)) },
-            text = { Text(text = stringResource(id = R.string.glassholder_warning)) },
+            title = { Text(text = stringResource(id = R.string.coaster)) },
+            text = { Text(text = stringResource(id = R.string.coaster_warning)) },
             onDismissRequest = { isDialogVisible = false },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        context.startActivity(Intent(context, GlassholderActivity::class.java))
+                        context.startActivity(Intent(context, CoasterActivity::class.java))
                         isDialogVisible = false
                     }
                 ) {
@@ -94,15 +94,12 @@ fun LabeledSwitch(
 ) {
     Box(
         modifier = Modifier
+            .padding(8.dp)
             .clickable {
                 onCheckedChange(!checked)
             }
     ) {
-        Row(
-            modifier = Modifier
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 modifier = Modifier.weight(1f),
                 text = label,
