@@ -117,7 +117,7 @@ class CoasterActivity : AppCompatActivity() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .alpha(.2f),
-                        text = stringResource(id = R.string.put_your_glass_here),
+                        text = stringResource(id = R.string.place_your_glass_here),
                         textAlign = TextAlign.Center
                     )
                 }

@@ -31,5 +31,5 @@
     <!-- Coaster -->
     <string name="coaster">Pohártartó</string>
     <string name="coaster_warning">Ezt a funkciót csak kisebb poharakkal érdemes használni és légy nagyon óvatos, hogy a telefon sértetlen maradjon! Csak akkor használd a pohártartót, ha vállalod a következményeket!</string>
-    <string name="put_your_glass_here">Tedd ide a poharad</string>
+    <string name="place_your_glass_here">Tedd ide a poharad</string>
 </resources>

@@ -30,6 +30,6 @@
 
     <!-- Coaster -->
     <string name="coaster">Coaster</string>
-    <string name="coaster_warning">Warning: Only use this feature with smaller glasses and be very careful so that the phone remains intact! Use the cup holder only if you\'re willing to take the consequences!</string>
-    <string name="put_your_glass_here">Place your glass here</string>
+    <string name="coaster_warning">Warning: Only use this feature with smaller glasses and be very careful so that the phone remains intact! Use the coaster only if you\'re willing to take the consequences!</string>
+    <string name="place_your_glass_here">Place your glass here</string>
 </resources>
