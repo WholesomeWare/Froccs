@@ -30,7 +30,7 @@ import com.csakitheone.froccs.ui.theme.FröccsTheme
 import com.google.android.gms.ads.*
 
 class MainActivity : ComponentActivity() {
-    val DEMO_MODE = true
+    val DEMO_MODE = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
