@@ -8,6 +8,10 @@
         <entry key="../../../../layout/compose-model-1660727071065.xml" value="0.4690909090909091" />
         <entry key="../../../../layout/compose-model-1660727350881.xml" value="0.2388888888888889" />
         <entry key="../../../../layout/compose-model-1660728493909.xml" value="0.2388888888888889" />
+        <entry key="../../../../layout/compose-model-1660729933979.xml" value="0.2388888888888889" />
+        <entry key="../../../../layout/compose-model-1660730015957.xml" value="0.4690909090909091" />
+        <entry key="../../../../layout/compose-model-1660730045372.xml" value="0.48727272727272725" />
+        <entry key="../../../../layout/custom_preview.xml" value="0.1" />
         <entry key="..\:/Coding/Android/Froccs/app/src/main/res/layout/activity_game.xml" value="0.36666666666666664" />
         <entry key="..\:/Coding/Android/Froccs/app/src/main/res/layout/activity_glassholder.xml" value="0.36666666666666664" />
         <entry key="..\:/Coding/Android/Froccs/app/src/main/res/layout/activity_main.xml" value="0.3625" />
@@ -24,7 +28,7 @@
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
