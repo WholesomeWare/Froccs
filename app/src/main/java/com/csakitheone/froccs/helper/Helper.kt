@@ -9,8 +9,8 @@ class Helper {
     companion object {
 
         fun Float.roundToPreference(): Float {
-            return if (Prefs.preciseSliders) (this * 20).roundToInt() / 2f
-            else (this * 10).roundToInt().toFloat()
+            return if (Prefs.preciseSliders) (this * 2).roundToInt() / 2f
+            else this.roundToInt().toFloat()
         }
 
     }

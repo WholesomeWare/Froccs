@@ -4,14 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.LabeledIntent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Share
@@ -25,6 +23,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.csakitheone.froccs.CellarActivity
@@ -45,7 +45,7 @@ fun MixingScreen() {
     var recipe: Recipe? by remember { mutableStateOf(Data.getRecipes().firstOrNull()) }
     var amounts by remember { mutableStateOf(mutableMapOf<String, Float>(), neverEqualPolicy()) }
 
-    fun getAmountAsDl(): Float = amounts.values.map { it.roundToPreference() }.sum()
+    fun getAmountAsDl(): Float = amounts.values.sum()
 
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -112,9 +112,12 @@ fun MixingScreen() {
                         }
                     }
                 }
-                VineBottle(modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp), fullness = amounts.values.sum())
+                VineBottle(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    fullness = amounts.values.sum() / 10
+                )
             }
             Divider(modifier = Modifier
                 .padding(16.dp)
@@ -144,7 +147,7 @@ fun MixingScreen() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun IngredientSlider(
     label: String,
@@ -156,6 +159,11 @@ fun IngredientSlider(
     val context = LocalContext.current
 
     var isMenuVisible by remember { mutableStateOf(false) }
+    var isDialogVisible by remember { mutableStateOf(false) }
+    var sliderValue by remember { mutableStateOf(amount / 10) }
+    var amountString by remember(amount) {
+        mutableStateOf(amount.roundToPreference().toString())
+    }
 
     Box(
         modifier = Modifier
@@ -180,13 +188,19 @@ fun IngredientSlider(
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text = "${amount.roundToPreference()}dl",
-                    color = MaterialTheme.colorScheme.onBackground
+                    modifier = Modifier
+                        .clickable { isDialogVisible = true },
+                    text = "${amount}dl",
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textDecoration = TextDecoration.Underline
                 )
             }
             Slider(
-                value = amount,
-                onValueChange = onAmountChange
+                value = sliderValue,
+                onValueChange = {
+                    sliderValue = it
+                    onAmountChange((it * 10).roundToPreference())
+                }
             )
 
             DropdownMenu(expanded = isMenuVisible, onDismissRequest = { isMenuVisible = false }) {
@@ -201,6 +215,36 @@ fun IngredientSlider(
             }
         }
     }
+
+    if (isDialogVisible) {
+        AlertDialog(
+            title = { Text(text = label) },
+            text = {
+                TextField(
+                    value = amountString,
+                    onValueChange = { amountString = it },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Decimal
+                    )
+                )
+            },
+            onDismissRequest = { isDialogVisible = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        val newAmount = amountString.toFloatOrNull()
+                        if (newAmount != null) {
+                            sliderValue = newAmount / 10
+                            onAmountChange(newAmount)
+                            isDialogVisible = false
+                        }
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.set))
+                }
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -208,8 +252,8 @@ fun IngredientSlider(
 fun AddRecipeButton(amounts: MutableMap<String, Float>) {
     val context = LocalContext.current
     val ingredients = amounts
-        .filter { it.value.roundToPreference() >= .5f }
-        .map { Ingredient(it.key, it.value.roundToPreference(), false) }
+        .filter { it.value >= .2f }
+        .map { Ingredient(it.key, it.value, false) }
         .toMutableList()
 
     var isDialogVisible by remember { mutableStateOf(false) }
@@ -288,8 +332,8 @@ fun AddIngredientButton(onRefreshRequest: () -> Unit) {
 
 fun findRecipe(context: Context, amounts: MutableMap<String, Float>): Recipe {
     val ingredients = amounts
-        .filter { it.value.roundToPreference() >= .5f }
-        .map { Ingredient(it.key, it.value.roundToPreference(), false) }
+        .filter { it.value >= .2f }
+        .map { Ingredient(it.key, it.value, false) }
 
     if (ingredients.size == 1) {
         return Recipe.Builder(context).setName(ingredients.first().name).build()
