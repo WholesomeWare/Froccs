@@ -1,6 +1,5 @@
 package com.csakitheone.froccs.ui.components
 
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.LabeledIntent
@@ -29,7 +28,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.csakitheone.froccs.CellarActivity
-import com.csakitheone.froccs.MainActivity
 import com.csakitheone.froccs.R
 import com.csakitheone.froccs.data.Data
 import com.csakitheone.froccs.data.Temp
@@ -38,7 +36,7 @@ import com.csakitheone.froccs.model.Recipe
 import com.csakitheone.froccs.helper.Helper.Companion.roundToPreference
 import kotlin.math.min
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun MixingScreen() {
     val context = LocalContext.current
@@ -141,33 +139,6 @@ fun MixingScreen() {
                 onRefreshRequest = {
                     ingredients = Data.getIngredients()
                 }
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-fun VineBottle(modifier: Modifier = Modifier, fullness: Float = 1f) {
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        Box(
-            modifier = Modifier
-                .width(IntrinsicSize.Min)
-                .height(IntrinsicSize.Min),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding(start = 48.dp, end = 48.dp, top = 42.dp, bottom = 18.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(MaterialTheme.colorScheme.secondary)
-                    .fillMaxWidth()
-                    .fillMaxHeight(min(1f, fullness))
-            )
-            Image(
-                painter = painterResource(id = R.drawable.bottle_wine_outline),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
             )
         }
     }
