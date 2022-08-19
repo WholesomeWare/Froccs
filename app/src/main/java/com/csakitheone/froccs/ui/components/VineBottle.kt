@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,17 +52,19 @@ fun VineBottle(modifier: Modifier = Modifier, fullness: Float = 1f) {
         ) {
             WaveAnimation(
                 modifier = Modifier
-                    .width(36.dp)
-                    .height(100.dp)
-                    .offset(y = 5.dp),
+                    .width(50.dp)
+                    .height(130.dp)
+                    .offset(y = 10.dp),
                 color = MaterialTheme.colorScheme.secondary,
                 progress = smoothFullness,
                 amplitudeMultiplier = waveIntensity
             )
             Image(
+                modifier = Modifier.aspectRatio(1 / 1.6f),
                 painter = painterResource(id = R.drawable.bottle_wine_outline),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
+                contentScale = ContentScale.FillHeight
             )
         }
     }

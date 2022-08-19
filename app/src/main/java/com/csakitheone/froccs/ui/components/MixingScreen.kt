@@ -39,7 +39,7 @@ fun MixingScreen() {
     var recipe: Recipe? by remember { mutableStateOf(Data.getRecipes().firstOrNull()) }
     var amounts by remember { mutableStateOf(mutableMapOf<String, Float>(), neverEqualPolicy()) }
 
-    fun getAmountAsDl(): Float = amounts.values.sum()
+    fun getAmountAsDl(): String = amounts.values.sum().toString().replace(".0", "")
 
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -108,7 +108,8 @@ fun MixingScreen() {
                 }
                 VineBottle(
                     modifier = Modifier
-                        .weight(1f),
+                        .weight(1f)
+                        .height(250.dp),
                     fullness = amounts.values.sum() / 10
                 )
             }
@@ -179,7 +180,8 @@ fun IngredientSlider(
                 )
                 Text(
                     modifier = Modifier
-                        .clickable { isDialogVisible = true },
+                        .clickable { isDialogVisible = true }
+                        .padding(horizontal = 8.dp),
                     text = "${amount.toString().replace(".0", "")}dl",
                     color = MaterialTheme.colorScheme.onBackground,
                     textDecoration = TextDecoration.Underline
