@@ -8,7 +8,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -17,11 +16,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
@@ -34,7 +29,6 @@ import com.csakitheone.froccs.data.Temp
 import com.csakitheone.froccs.model.Ingredient
 import com.csakitheone.froccs.model.Recipe
 import com.csakitheone.froccs.helper.Helper.Companion.roundToPreference
-import kotlin.math.min
 
 @Preview(showBackground = true)
 @Composable
@@ -114,14 +108,10 @@ fun MixingScreen() {
                 }
                 VineBottle(
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp),
+                        .weight(1f),
                     fullness = amounts.values.sum() / 10
                 )
             }
-            Divider(modifier = Modifier
-                .padding(16.dp)
-                .alpha(.5f))
         }
         items(items = ingredients) { ingredient ->
             IngredientSlider(
@@ -161,8 +151,8 @@ fun IngredientSlider(
     var isMenuVisible by remember { mutableStateOf(false) }
     var isDialogVisible by remember { mutableStateOf(false) }
     var sliderValue by remember { mutableStateOf(amount / 10) }
-    var amountString by remember(amount) {
-        mutableStateOf(amount.roundToPreference().toString())
+    var roundedAmountString by remember(amount) {
+        mutableStateOf(amount.roundToPreference().toString().replace(".0", ""))
     }
 
     Box(
@@ -190,7 +180,7 @@ fun IngredientSlider(
                 Text(
                     modifier = Modifier
                         .clickable { isDialogVisible = true },
-                    text = "${amount}dl",
+                    text = "${amount.toString().replace(".0", "")}dl",
                     color = MaterialTheme.colorScheme.onBackground,
                     textDecoration = TextDecoration.Underline
                 )
@@ -221,8 +211,8 @@ fun IngredientSlider(
             title = { Text(text = label) },
             text = {
                 TextField(
-                    value = amountString,
-                    onValueChange = { amountString = it },
+                    value = roundedAmountString,
+                    onValueChange = { roundedAmountString = it },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Decimal
                     )
@@ -232,7 +222,7 @@ fun IngredientSlider(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        val newAmount = amountString.toFloatOrNull()
+                        val newAmount = roundedAmountString.toFloatOrNull()
                         if (newAmount != null) {
                             sliderValue = newAmount / 10
                             onAmountChange(newAmount)
