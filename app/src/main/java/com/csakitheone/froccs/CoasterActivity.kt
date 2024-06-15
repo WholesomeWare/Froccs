@@ -3,14 +3,16 @@ package com.csakitheone.froccs
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
@@ -27,20 +29,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.csakitheone.froccs.ui.theme.FröccsTheme
-import com.flask.colorpicker.ColorPickerView
-import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 
-class CoasterActivity : AppCompatActivity() {
+class CoasterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         window.attributes.screenBrightness = 1.0f
+        enableEdgeToEdge()
 
         setContent {
             CoasterScreen()
         }
-
-        hideSystemUI()
     }
 
     @Preview
@@ -62,7 +61,7 @@ class CoasterActivity : AppCompatActivity() {
 
                 IconButton(
                     onClick = {
-                        ColorPickerDialogBuilder
+                        /*ColorPickerDialogBuilder
                             .with(this@CoasterActivity)
                             .initialColor(selectedColor.toArgb())
                             .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
@@ -74,7 +73,7 @@ class CoasterActivity : AppCompatActivity() {
                             .setPositiveButton("Ok") { _, color, _ ->
                                 selectedColor = Color(color)
                             }
-                            .build().show()
+                            .build().show()*/
                     }
                 ) {
                     Icon(
@@ -85,11 +84,6 @@ class CoasterActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun hideSystemUI() {
-        window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        window.insetsController?.hide(WindowInsets.Type.systemBars())
     }
 
     @Composable

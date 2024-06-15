@@ -35,7 +35,7 @@ fun SettingsScreen(activity: Activity? = null) {
     ) {
         GlassholderButton()
 
-        SupportDeveloperLayout(activity)
+        //SupportDeveloperLayout(activity)
 
         LabeledSwitch(
             label = stringResource(id = R.string.precise_sliders),

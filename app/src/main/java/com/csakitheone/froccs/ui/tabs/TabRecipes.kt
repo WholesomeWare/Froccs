@@ -1,9 +1,6 @@
-package com.csakitheone.froccs.ui.components
+package com.csakitheone.froccs.ui.tabs
 
 import android.content.Intent
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.csakitheone.froccs.CellarActivity
 import com.csakitheone.froccs.R
 import com.csakitheone.froccs.data.Data
-import com.csakitheone.froccs.model.Recipe
+import com.csakitheone.froccs.ui.components.RecipeView
 
 @Preview
 @Composable
@@ -31,19 +28,6 @@ fun RecipesScreen() {
     }
 
     LazyColumn(modifier = Modifier.padding(8.dp)) {
-        item {
-            Button(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                onClick = {
-                    context.startActivity(Intent(context, CellarActivity::class.java))
-                }
-            ) {
-                Icon(painter = painterResource(id = R.drawable.ic_barrel), contentDescription = null)
-                Text(text = stringResource(id = R.string.cellar) + ": " + stringResource(id = R.string.user_created_drinks))
-            }
-        }
         items(items = recipes) { recipe ->
             RecipeView(
                 recipe = recipe,

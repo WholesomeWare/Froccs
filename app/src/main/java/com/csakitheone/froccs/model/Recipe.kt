@@ -1,7 +1,6 @@
 package com.csakitheone.froccs.model
 
 import android.content.Context
-import androidx.preference.PreferenceManager
 import kotlin.math.roundToInt
 
 class Recipe(val context: Context) {
@@ -49,13 +48,15 @@ class Recipe(val context: Context) {
         return "$name:${ingredients.joinToString(",")}"
     }
 
+    @Deprecated("Rewrite needed")
     override fun toString(): String {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        /*val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         var text = "$name:\n"
         text += ingredients.joinToString { r ->
             (if (r.amount == r.amount.roundToInt().toFloat()) r.amount.roundToInt() else r.amount).toString() + (if (prefs.getBoolean("pref_show_dl", true)) "dl " else " ") + r.name
         }
-        return text.replace("()", "")
+        return text.replace("()", "")*/
+        return ""
     }
 
     class Builder(context: Context) {

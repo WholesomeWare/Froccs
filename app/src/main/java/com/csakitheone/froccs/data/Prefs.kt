@@ -3,7 +3,6 @@ package com.csakitheone.froccs.data
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 
 class Prefs {
     companion object {
@@ -11,12 +10,13 @@ class Prefs {
         private var prefs: SharedPreferences? = null
 
         fun init(context: Context) {
-            prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            //prefs = PreferenceManager.getDefaultSharedPreferences(context)
         }
 
+        @Deprecated("Rewrite needed")
         var preciseSliders: Boolean
-            get() = prefs?.getBoolean("precise_sliders", false) ?: false
-            set(value) { prefs?.edit { putBoolean("precise_sliders", value); commit() } }
+            get() = false//prefs?.getBoolean("precise_sliders", false) ?: false
+            set(value) { /*prefs?.edit { putBoolean("precise_sliders", value); commit() }*/ }
 
     }
 }

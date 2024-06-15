@@ -3,6 +3,7 @@
     <string name="app_name">Fröccs</string>
 
     <string name="set">Beállít</string>
+    <string name="cancel">Mégsem</string>
 
     <string name="ingredient_vine">Bor</string>
     <string name="ingredient_soda">Szóda</string>

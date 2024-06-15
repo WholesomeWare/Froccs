@@ -5,22 +5,21 @@ import com.csakitheone.froccs.model.Ingredient
 import com.csakitheone.froccs.model.Recipe
 import com.csakitheone.froccs.model.database.IngredientData
 import com.csakitheone.froccs.model.database.RecipeData
-import com.google.common.reflect.TypeToken
-import com.google.firebase.firestore.FirebaseFirestore
 
+@Deprecated("Rewrite needed")
 class FSDB {
     companion object {
 
-        private val fsdb = FirebaseFirestore.getInstance()
+        //private val fsdb = FirebaseFirestore.getInstance()
 
         fun getRecipes(context: Context, callback: (List<Recipe>) -> Unit) {
-            fsdb.collection("recipes").get().addOnCompleteListener {
+            /*fsdb.collection("recipes").get().addOnCompleteListener {
                 if (!it.isSuccessful) {
                     callback(listOf())
                     return@addOnCompleteListener
                 }
                 callback(it.result.toObjects(RecipeData::class.java).map { rd -> rd.toRecipe(context) })
-            }
+            }*/
         }
 
         fun addRecipe(recipe: Recipe?, callback: (Boolean) -> Unit) {
@@ -32,9 +31,9 @@ class FSDB {
                 recipe.name,
                 recipe.ingredients.map { IngredientData(it.name, it.amount) }.toMutableList()
             )
-            fsdb.collection("recipes").add(data).addOnCompleteListener {
+            /*fsdb.collection("recipes").add(data).addOnCompleteListener {
                 callback(it.isSuccessful)
-            }
+            }*/
         }
 
     }
