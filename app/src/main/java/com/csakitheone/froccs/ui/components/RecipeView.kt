@@ -4,9 +4,11 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -44,16 +46,26 @@ fun RecipeView(recipe: Recipe, onRefreshRequest: () -> Unit = {}) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                modifier = Modifier.padding(8.dp).weight(1f),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f),
                 text = recipe.name,
                 color = MaterialTheme.colorScheme.onBackground
             )
-            Text(
+            Column(
                 modifier = Modifier.padding(8.dp),
-                text = recipe.getIngredientsString(),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+                horizontalAlignment = Alignment.End,
+            ) {
+                Text(
+                    text = recipe.getIngredientsString(),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                LinearProgressIndicator(
+                    modifier = Modifier.width(120.dp),
+                    progress = { recipe.getRatio() },
+                )
+            }
 
             DropdownMenu(expanded = isMenuVisible, onDismissRequest = { isMenuVisible = false }) {
                 DropdownMenuItem(

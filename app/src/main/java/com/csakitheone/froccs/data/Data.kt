@@ -55,8 +55,8 @@ class Data {
             addSpritzer("Háp-háp (Fehérvárról)", "Quack-quack", 2F, 2F)
             addSpritzer("Előrelépés", "Step forward", 8F, 1F)
             addSpritzer("Puskás fröccs / Magyar-angol", "Puskás spritzer / Hungary-england", 6F, 3F)
-            addSpritzer("Góré föccs (pohár bor és egy spriccentésnyi szóda)", "", 2F, .5F)
-            addSpritzer("Deák föccs (pohár szóda és egy csepp bor)", "", .5F, 2F)
+            addSpritzer("Góré föccs (pohár bor és egy spriccentésnyi szóda)", "", 1.5F, .5F)
+            addSpritzer("Deák föccs (pohár szóda és egy csepp bor)", "", .5F, 1.5F)
             addSpritzer(
                 "Ijesztett / Spricc föccs (sok bor és egy spriccentésnyi szóda)",
                 "",
