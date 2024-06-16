@@ -38,13 +38,6 @@ class MainActivity : ComponentActivity() {
         Prefs.init(this)
         Data.load(this)
 
-        /*MobileAds.setRequestConfiguration(
-            RequestConfiguration.Builder()
-                .setTestDeviceIds(listOf("FB727C3E2E7E37FB1BCB7C55C84A9993"))
-                .build()
-        )
-        MobileAds.initialize(this)*/
-
         setContent {
             MainScreen()
         }
@@ -128,19 +121,6 @@ class MainActivity : ComponentActivity() {
                                 1 -> RecipesScreen()
                             }
                         }
-                    }
-
-                    if (!LocalInspectionMode.current && !DEMO_MODE && false) {
-                        /*AndroidView(
-                        modifier = Modifier.fillMaxWidth(),
-                        factory = {
-                            AdView(it).apply {
-                                setAdSize(AdSize.BANNER)
-                                adUnitId = "ca-app-pub-5995992409743558/6068638221"
-                                loadAd(AdRequest.Builder().build())
-                            }
-                        }
-                    )*/
                     }
 
                     NavigationBar {

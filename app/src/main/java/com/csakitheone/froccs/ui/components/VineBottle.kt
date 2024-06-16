@@ -27,7 +27,10 @@ import kotlin.math.roundToInt
 
 @Preview
 @Composable
-fun VineBottle(modifier: Modifier = Modifier, fullness: Float = 1f) {
+fun VineBottle(
+    modifier: Modifier = Modifier,
+    fullness: Float = 1f,
+) {
     val smoothFullness by animateFloatAsState(targetValue = fullness)
     var waveInteracted by remember { mutableStateOf(false) }
     LaunchedEffect(fullness) { waveInteracted = true }

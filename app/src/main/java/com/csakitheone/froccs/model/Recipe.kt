@@ -1,6 +1,7 @@
 package com.csakitheone.froccs.model
 
 import android.content.Context
+import com.csakitheone.froccs.R
 import kotlin.math.roundToInt
 
 class Recipe(val context: Context) {
@@ -9,14 +10,19 @@ class Recipe(val context: Context) {
     var ingredients: MutableList<Ingredient> = mutableListOf()
     var isRemovable: Boolean = true
 
-    constructor(context: Context, name: String, ingredients: MutableList<Ingredient>, isRemovable: Boolean = true): this(context) {
+    constructor(
+        context: Context,
+        name: String,
+        ingredients: MutableList<Ingredient>,
+        isRemovable: Boolean = true
+    ) : this(context) {
         this.name = name
         this.ingredients = mutableListOf()
         this.ingredients.addAll(ingredients.map { r -> r.copy() })
         this.isRemovable = isRemovable
     }
 
-    constructor(context: Context, text: String, isRemovable: Boolean = true): this(context) {
+    constructor(context: Context, text: String, isRemovable: Boolean = true) : this(context) {
         this.name = text.split(':')[0]
         this.ingredients = mutableListOf()
         this.ingredients.addAll(text.split(':')[1].split(',').map { r -> Ingredient(r, false) })
@@ -30,6 +36,12 @@ class Recipe(val context: Context) {
 
     fun getSize(): Float {
         return ingredients.map { it.amount }.sum()
+    }
+
+    fun getRatio(): Float {
+        return (ingredients.firstOrNull {
+            it.name == context.getString(R.string.ingredient_vine)
+        }?.amount ?: 0f) / getSize()
     }
 
     fun check(ings: List<Ingredient>): Boolean {
