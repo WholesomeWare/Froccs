@@ -27,7 +27,7 @@ fun RecipesScreen() {
         mutableStateOf(Data.getRecipes().filter { it.ingredients.isNotEmpty() }, neverEqualPolicy())
     }
 
-    LazyColumn(modifier = Modifier.padding(8.dp)) {
+    LazyColumn {
         items(items = recipes) { recipe ->
             RecipeView(
                 recipe = recipe,
