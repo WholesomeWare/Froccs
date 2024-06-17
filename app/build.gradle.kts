@@ -53,7 +53,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.6.8")
     implementation("androidx.compose.material3:material3-adaptive-navigation-suite-android:1.3.0-beta03")
 
+    implementation("io.mhssn:colorpicker:1.0.0")
     implementation("com.github.CsakiTheOne:WholesomeWare:1.0")
+
     implementation(libs.androidx.core.splashscreen)
 
     implementation(libs.androidx.core.ktx)

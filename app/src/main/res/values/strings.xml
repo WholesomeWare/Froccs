@@ -11,25 +11,9 @@
     <string name="empty_bottle">Empty bottle</string>
 
     <!-- Main -->
-    <string name="main_tab_mixing">Mix a drink</string>
     <string name="main_tab_recipes">Recipes</string>
-    <string name="main_tab_settings">Settings</string>
-
-    <!-- Mixing -->
-    <string name="no_recipe_found">No recipe found</string>
-    <string name="add_recipe">Add recipe</string>
-    <string name="remove_recipe">Remove recipe</string>
-    <string name="add_ingredient">Add ingredient</string>
-    <string name="remove_ingredient">Remove ingredient</string>
 
     <string name="add_to_cellar">Add it to the cellar</string>
-
-    <!-- Cellar -->
-    <string name="cellar">Cellar</string>
-    <string name="user_created_drinks">User created drinks</string>
-
-    <!-- Settings -->
-    <string name="precise_sliders">Switch to more precise sliders</string>
 
     <!-- Coaster -->
     <string name="coaster">Coaster</string>
