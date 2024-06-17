@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="SplashScreen" parent="Theme.SplashScreen">
+        <item name="android:windowSplashScreenBrandingImage" tools:targetApi="s">@drawable/logo_with_text</item>
+        <item name="postSplashScreenTheme">@style/Theme.Fröccs</item>
+    </style>
+</resources>

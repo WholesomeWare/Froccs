@@ -22,7 +22,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.csakitheone.froccs.CellarActivity
 import com.csakitheone.froccs.R
 import com.csakitheone.froccs.data.Data
 import com.csakitheone.froccs.data.Temp
@@ -75,7 +74,7 @@ fun MixingScreen() {
                     ) {
                         Button(
                             onClick = {
-                                Temp.selectedRecipe = recipe
+                                /*Temp.selectedRecipe = recipe
 
                                 val intent = Intent(Intent.ACTION_SEND)
                                     .putExtra(Intent.EXTRA_TEXT, recipe.toString())
@@ -96,7 +95,7 @@ fun MixingScreen() {
                                     Intent
                                         .createChooser(intent, null)
                                         .putExtra(Intent.EXTRA_INITIAL_INTENTS, targets)
-                                )
+                                )*/
                             }
                         ) {
                             Icon(

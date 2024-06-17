@@ -5,26 +5,32 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import com.csakitheone.froccs.data.Data
 import com.csakitheone.froccs.data.Prefs
-import com.csakitheone.froccs.ui.tabs.RecipesScreen
-import com.csakitheone.froccs.ui.components.SettingsScreen
-import com.csakitheone.froccs.ui.tabs.TabFroccs
+import com.csakitheone.froccs.ui.components.RecipeView
+import com.csakitheone.froccs.ui.components.TabFroccs
 import com.csakitheone.froccs.ui.theme.FröccsTheme
 import kotlinx.coroutines.launch
 
@@ -32,6 +38,7 @@ class MainActivity : ComponentActivity() {
     val DEMO_MODE = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
@@ -48,10 +55,23 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun MainScreen() {
         FröccsTheme {
+            val darkTheme = isSystemInDarkTheme()
             val coroutineScope = rememberCoroutineScope()
-            val pagerState = rememberPagerState(pageCount = { 2 })
+
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             var isMenuOpen by remember { mutableStateOf(false) }
             var isCoasterWarningDialogVisible by remember { mutableStateOf(false) }
+
+            val recipes by remember {
+                mutableStateOf(Data.getRecipes().filter { recipe -> recipe.ingredients.size == 2 })
+            }
+
+            LaunchedEffect(darkTheme, drawerState.isClosed) {
+                WindowCompat.getInsetsController(
+                    window,
+                    window.decorView
+                ).isAppearanceLightStatusBars = drawerState.isClosed == darkTheme
+            }
 
             if (isCoasterWarningDialogVisible) {
                 AlertDialog(
@@ -79,81 +99,79 @@ class MainActivity : ComponentActivity() {
             }
 
             Surface(color = MaterialTheme.colorScheme.background) {
-                Column {
-                    TopAppBar(
-                        title = { Text(text = stringResource(R.string.app_name)) },
-                        actions = {
-                            IconButton(onClick = { isMenuOpen = true }) {
-                                Icon(
-                                    imageVector = Icons.Default.MoreVert,
-                                    contentDescription = null
-                                )
-                                DropdownMenu(
-                                    expanded = isMenuOpen,
-                                    onDismissRequest = { isMenuOpen = false },
-                                ) {
-                                    DropdownMenuItem(
-                                        text = { Text(stringResource(id = R.string.coaster)) },
-                                        onClick = {
-                                            isCoasterWarningDialogVisible = true
-                                            isMenuOpen = false
-                                        }
-                                    )
-                                }
-                            }
-                        },
-                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                            actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                        ),
-                    )
-
-                    HorizontalPager(
-                        modifier = Modifier.weight(1f),
-                        state = pagerState,
-                    ) { page ->
-                        Box(
-                            modifier = Modifier.fillMaxSize(1f)
+                DismissibleNavigationDrawer(
+                    modifier = Modifier.fillMaxSize(),
+                    drawerState = drawerState,
+                    drawerContent = {
+                        DismissibleDrawerSheet(
+                            modifier = Modifier.verticalScroll(rememberScrollState()),
+                            drawerState = drawerState,
+                            drawerContainerColor = MaterialTheme.colorScheme.surfaceContainer,
                         ) {
-                            when (page) {
-                                0 -> TabFroccs()
-                                1 -> RecipesScreen()
+                            Text(
+                                modifier = Modifier.padding(16.dp),
+                                text = stringResource(id = R.string.main_tab_recipes),
+                                style = MaterialTheme.typography.titleLarge,
+                            )
+                            recipes.forEach { recipe ->
+                                RecipeView(
+                                    recipe = recipe,
+                                    onClick = {
+                                        //TODO: select recipe
+                                    }
+                                )
                             }
                         }
-                    }
-
-                    NavigationBar {
-                        NavigationBarItem(
-                            selected = pagerState.currentPage == 0,
-                            onClick = {
-                                coroutineScope.launch {
-                                    pagerState.animateScrollToPage(0)
+                    },
+                ) {
+                    Column {
+                        TopAppBar(
+                            title = { Text(text = stringResource(R.string.app_name)) },
+                            navigationIcon = {
+                                IconButton(
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            if (drawerState.isClosed) drawerState.open()
+                                            else drawerState.close()
+                                        }
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = if (drawerState.isClosed) Icons.Default.Menu
+                                        else Icons.AutoMirrored.Default.ArrowBack,
+                                        contentDescription = null
+                                    )
                                 }
                             },
-                            icon = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_bottle_wine),
-                                    contentDescription = null
-                                )
-                            },
-                            label = { Text(text = stringResource(id = R.string.main_tab_mixing)) }
-                        )
-                        NavigationBarItem(
-                            selected = pagerState.currentPage == 1,
-                            onClick = {
-                                coroutineScope.launch {
-                                    pagerState.animateScrollToPage(1)
+                            actions = {
+                                IconButton(onClick = { isMenuOpen = true }) {
+                                    Icon(
+                                        imageVector = Icons.Default.MoreVert,
+                                        contentDescription = null
+                                    )
+                                    DropdownMenu(
+                                        expanded = isMenuOpen,
+                                        onDismissRequest = { isMenuOpen = false },
+                                    ) {
+                                        DropdownMenuItem(
+                                            text = { Text(stringResource(id = R.string.coaster)) },
+                                            onClick = {
+                                                isCoasterWarningDialogVisible = true
+                                                isMenuOpen = false
+                                            }
+                                        )
+                                    }
                                 }
                             },
-                            icon = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_grapes),
-                                    contentDescription = null
-                                )
-                            },
-                            label = { Text(text = stringResource(id = R.string.main_tab_recipes)) }
+                            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                                navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                                actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                            ),
                         )
+                        TabFroccs()
+                        Spacer(modifier = Modifier.systemBarsPadding())
                     }
                 }
             }

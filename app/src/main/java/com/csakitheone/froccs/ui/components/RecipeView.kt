@@ -1,6 +1,7 @@
 package com.csakitheone.froccs.ui.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,22 +23,14 @@ import com.csakitheone.froccs.model.Recipe
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun RecipeView(recipe: Recipe, onRefreshRequest: () -> Unit = {}) {
-    val context = LocalContext.current
-
-    var isInfoDialogVisible by remember { mutableStateOf(false) }
-    var isMenuVisible by remember { mutableStateOf(false) }
-
+fun RecipeView(
+    modifier: Modifier = Modifier,
+    recipe: Recipe,
+    onClick: () -> Unit = {},
+) {
     Box(
-        modifier = Modifier
-            .combinedClickable(
-                onClick = {
-                    if (!recipe.isRemovable) isInfoDialogVisible = true
-                },
-                onLongClick = {
-                    if (recipe.isRemovable) isMenuVisible = true
-                }
-            )
+        modifier = modifier
+            .clickable { onClick() }
     ) {
         Row(
             modifier = Modifier
@@ -59,44 +52,13 @@ fun RecipeView(recipe: Recipe, onRefreshRequest: () -> Unit = {}) {
                 Text(
                     text = recipe.getIngredientsString(),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = .5f),
                 )
                 LinearProgressIndicator(
                     modifier = Modifier.width(120.dp),
                     progress = { recipe.getRatio() },
                 )
             }
-
-            DropdownMenu(expanded = isMenuVisible, onDismissRequest = { isMenuVisible = false }) {
-                DropdownMenuItem(
-                    text = { Text(text = stringResource(id = R.string.remove_recipe)) },
-                    onClick = {
-                        Data.removeRecipe(context, recipe)
-                        isMenuVisible = false
-                        onRefreshRequest()
-                    }
-                )
-            }
         }
-    }
-
-    if (isInfoDialogVisible) {
-        AlertDialog(
-            title = { Text(text = recipe.name) },
-            text = {
-                Column {
-                    if (recipe.englishName.isNotEmpty()) {
-                        Text(modifier = Modifier.padding(8.dp), text = recipe.englishName)
-                    }
-                    Text(modifier = Modifier.padding(8.dp), text = recipe.getIngredientsString())
-                }
-            },
-            onDismissRequest = { isInfoDialogVisible = false },
-            confirmButton = {
-                TextButton(onClick = { isInfoDialogVisible = false }) {
-                    Text(text = "Ok")
-                }
-            }
-        )
     }
 }

@@ -39,6 +39,8 @@ class Recipe(val context: Context) {
     }
 
     fun getRatio(): Float {
+        if (getSize() == 0f) return 0f
+
         return (ingredients.firstOrNull {
             it.name == context.getString(R.string.ingredient_vine)
         }?.amount ?: 0f) / getSize()

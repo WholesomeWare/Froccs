@@ -10,11 +10,8 @@ class Data {
     companion object {
         private var ingredients: MutableList<Ingredient> = mutableListOf()
         private var recipes: MutableList<Recipe> = mutableListOf()
-        private lateinit var context: Context
 
         fun load(context: Context) {
-            this.context = context
-
             ingredients = mutableListOf()
             ingredients.add(
                 Ingredient(
@@ -37,34 +34,35 @@ class Data {
                     false
                 )
             )
-            addSpritzer("Kisfröccs", "Small spritzer", 1F, 1F)
-            addSpritzer("Nagyfröccs", "Big spritzer", 2F, 1F)
-            addSpritzer("Hosszúlépés", "Long step", 1F, 2F)
-            addSpritzer("Háziúr / Bivalycsók", "", 4F, 1F)
-            addSpritzer("Házmester", "", 3F, 2F)
-            addSpritzer("Viceházmester", "", 2F, 3F)
-            addSpritzer("Sportfröccs", "Sport spritzer", 1F, 4F)
-            addSpritzer("Krúdy fröccs", "", 9F, 1F)
-            addSpritzer("Avasi fröccs", "", 7F, 3F)
-            addSpritzer("Polgármester", "Mayor", 6F, 4F)
-            addSpritzer("Maflás", "", 5F, 5F)
-            addSpritzer("Alpolgármester", "Deputy mayor", 4F, 6F)
-            addSpritzer("Sóherfröccs / Távolugrás", "", 1F, 9F)
+            addSpritzer(context, "Kisfröccs", "Small spritzer", 1F, 1F)
+            addSpritzer(context, "Nagyfröccs", "Big spritzer", 2F, 1F)
+            addSpritzer(context, "Hosszúlépés", "Long step", 1F, 2F)
+            addSpritzer(context, "Háziúr / Bivalycsók", "", 4F, 1F)
+            addSpritzer(context, "Házmester", "", 3F, 2F)
+            addSpritzer(context, "Viceházmester", "", 2F, 3F)
+            addSpritzer(context, "Sportfröccs", "Sport spritzer", 1F, 4F)
+            addSpritzer(context, "Krúdy fröccs", "", 9F, 1F)
+            addSpritzer(context, "Avasi fröccs", "", 7F, 3F)
+            addSpritzer(context, "Polgármester", "Mayor", 6F, 4F)
+            addSpritzer(context, "Maflás", "", 5F, 5F)
+            addSpritzer(context, "Alpolgármester", "Deputy mayor", 4F, 6F)
+            addSpritzer(context, "Sóherfröccs / Távolugrás", "", 1F, 9F)
 
-            addSpritzer("Kisharapás (Cecéről)", "Small bite", .5F, .5F)
-            addSpritzer("Háp-háp (Fehérvárról)", "Quack-quack", 2F, 2F)
-            addSpritzer("Előrelépés", "Step forward", 8F, 1F)
-            addSpritzer("Puskás fröccs / Magyar-angol", "Puskás spritzer / Hungary-england", 6F, 3F)
-            addSpritzer("Góré föccs (pohár bor és egy spriccentésnyi szóda)", "", 1.5F, .5F)
-            addSpritzer("Deák föccs (pohár szóda és egy csepp bor)", "", .5F, 1.5F)
+            addSpritzer(context, "Kisharapás (Cecéről)", "Small bite", .5F, .5F)
+            addSpritzer(context, "Háp-háp (Fehérvárról)", "Quack-quack", 2F, 2F)
+            addSpritzer(context, "Előrelépés", "Step forward", 8F, 1F)
+            addSpritzer(context, "Puskás fröccs / Magyar-angol", "Puskás spritzer / Hungary-england", 6F, 3F)
+            addSpritzer(context, "Góré föccs (pohár bor és egy spriccentésnyi szóda)", "", 1.5F, .5F)
+            addSpritzer(context, "Deák föccs (pohár szóda és egy csepp bor)", "", .5F, 1.5F)
             addSpritzer(
+                context,
                 "Ijesztett / Spricc föccs (sok bor és egy spriccentésnyi szóda)",
                 "",
                 9.5F,
                 .5F
             )
 
-            addSpritzer("Csatos", "", 10F, 5F)
+            addSpritzer(context, "Csatos", "", 10F, 5F)
         }
 
         fun getGlassSizes(): IntArray {
@@ -103,7 +101,7 @@ class Data {
             save(context)
         }
 
-        private fun addSpritzer(name: String, englishName: String, wine: Float, soda: Float) {
+        private fun addSpritzer(context: Context, name: String, englishName: String, wine: Float, soda: Float) {
             recipes.add(
                 Recipe(
                     context,
