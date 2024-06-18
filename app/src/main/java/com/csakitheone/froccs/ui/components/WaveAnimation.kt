@@ -109,7 +109,7 @@ private fun rememberWavesTransition(): WavesTransition {
     )
 
     val amplitudeRatio = transition.animateFloat(
-        initialValue = 0.005f,
+        initialValue = 0.01f,
         targetValue = 0.015f,
         animationSpec = infiniteRepeatable(
             animation = tween(

@@ -32,20 +32,34 @@ fun VineBottle(
     fullness: Float = 1f,
 ) {
     val smoothFullness by animateFloatAsState(targetValue = fullness)
-    var waveInteracted by remember { mutableStateOf(false) }
-    LaunchedEffect(fullness) { waveInteracted = true }
-    LaunchedEffect(waveInteracted) { waveInteracted = false }
+    var waveAnimPlaying by remember { mutableStateOf(false) }
     val waveIntensity by animateFloatAsState(
-        targetValue = if (waveInteracted) 5f else 0f,
-        animationSpec = tween(if (waveInteracted) 0 else 1200)
+        targetValue = if (waveAnimPlaying) 5f else .2f,
+        animationSpec = if (!waveAnimPlaying) repeatable(
+            iterations = 1,
+            animation = tween(durationMillis = 1500, easing = EaseOutQuad),
+            repeatMode = RepeatMode.Restart,
+        )
+        else tween(durationMillis = 20),
+        finishedListener = {
+            waveAnimPlaying = false
+        },
     )
+
+    LaunchedEffect(fullness) {
+        waveAnimPlaying = true
+    }
 
     Box(
         modifier = modifier
             .pointerInput(Unit) {
-                detectTapGestures(onTap = { waveInteracted = true })
+                detectTapGestures(
+                    onPress = {
+                        waveAnimPlaying = true
+                    }
+                )
             },
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Box(
             modifier = Modifier
