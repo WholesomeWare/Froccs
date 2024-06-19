@@ -5,15 +5,25 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -21,8 +31,13 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -31,8 +46,10 @@ import com.csakitheone.froccs.data.Data
 import com.csakitheone.froccs.data.Prefs
 import com.csakitheone.froccs.ui.components.RecipeView
 import com.csakitheone.froccs.ui.components.TabFroccs
+import com.csakitheone.froccs.ui.components.VineBottle
 import com.csakitheone.froccs.ui.theme.FröccsTheme
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
     val DEMO_MODE = false
@@ -64,6 +81,27 @@ class MainActivity : ComponentActivity() {
 
             val recipes by remember {
                 mutableStateOf(Data.getRecipes().filter { recipe -> recipe.ingredients.size == 2 })
+            }
+
+            var glassSize by remember { mutableIntStateOf(2) }
+            var ingredientsRatio by remember { mutableFloatStateOf(.5f) }
+            val amountVine by remember(glassSize, ingredientsRatio) {
+                mutableFloatStateOf(
+                    (ingredientsRatio * glassSize * 2).roundToInt() / 2f
+                )
+            }
+            val amountSoda by remember(glassSize, ingredientsRatio) {
+                mutableFloatStateOf(
+                    glassSize - ((ingredientsRatio * glassSize * 2).roundToInt() / 2f)
+                )
+            }
+            val recipe by remember(amountSoda, amountVine) {
+                mutableStateOf(
+                    Data.getRecipes().firstOrNull { recipe ->
+                        recipe.ingredients.firstOrNull { it.name == getString(R.string.ingredient_soda) }?.amount == amountSoda &&
+                                recipe.ingredients.firstOrNull { it.name == getString(R.string.ingredient_vine) }?.amount == amountVine
+                    }
+                )
             }
 
             LaunchedEffect(darkTheme, drawerState.isClosed) {
@@ -113,11 +151,15 @@ class MainActivity : ComponentActivity() {
                                 text = stringResource(id = R.string.main_tab_recipes),
                                 style = MaterialTheme.typography.titleLarge,
                             )
-                            recipes.forEach { recipe ->
+                            recipes.forEach { r ->
                                 RecipeView(
-                                    recipe = recipe,
+                                    recipe = r,
                                     onClick = {
-                                        //TODO: select recipe
+                                        glassSize = r.getSize().toInt()
+                                        ingredientsRatio = r.getRatio()
+                                        coroutineScope.launch {
+                                            drawerState.close()
+                                        }
                                     }
                                 )
                             }
@@ -170,8 +212,96 @@ class MainActivity : ComponentActivity() {
                                 actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
                             ),
                         )
-                        TabFroccs()
-                        Spacer(modifier = Modifier.systemBarsPadding())
+
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.SpaceBetween,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .horizontalScroll(rememberScrollState()),
+                            ) {
+                                Data.getGlassSizes()
+                                    .filter { it != 0 }
+                                    .forEach { size ->
+                                        FilterChip(
+                                            modifier = Modifier
+                                                .padding(16.dp)
+                                                .graphicsLayer {
+                                                    scaleX = if (glassSize == size) 1.2f else 1f
+                                                    scaleY = if (glassSize == size) 1.2f else 1f
+                                                },
+                                            label = { Text(text = "${size}dl") },
+                                            selected = glassSize == size,
+                                            onClick = {
+                                                glassSize = size
+                                            },
+                                        )
+                                    }
+                            }
+
+                            VineBottle(
+                                modifier = Modifier.size(250.dp),
+                                fullness = glassSize / 10f,
+                            )
+
+                            Text(
+                                modifier = Modifier.padding(16.dp),
+                                text = "${amountVine}dl ${stringResource(id = R.string.ingredient_vine)}, ${amountSoda}dl ${
+                                    stringResource(
+                                        id = R.string.ingredient_soda
+                                    )
+                                }".replace(".0", "")
+                            )
+
+                            AnimatedContent(targetState = recipe) {
+                                Text(
+                                    modifier = Modifier.padding(16.dp),
+                                    text = it?.name ?: "",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    textAlign = TextAlign.Center,
+                                )
+                            }
+
+                            Column(
+                                modifier = Modifier.padding(32.dp),
+                            ) {
+                                Box(
+                                    modifier = Modifier.offset(y = 4.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Data.getRecipes()
+                                        .filter { it.getSize() == glassSize.toFloat() }
+                                        .forEach { recipe ->
+                                            Row(
+                                                modifier = Modifier
+                                                    .padding(horizontal = 2.dp)
+                                                    .fillMaxWidth(),
+                                            ) {
+                                                Spacer(
+                                                    modifier = Modifier.fillMaxWidth(recipe.getRatio())
+                                                )
+                                                Surface(
+                                                    modifier = Modifier
+                                                        .size(8.dp)
+                                                        .offset(x = (-4).dp)
+                                                        .clip(CircleShape),
+                                                    color = MaterialTheme.colorScheme.primary
+                                                ) {}
+                                            }
+                                        }
+                                }
+
+                                Slider(
+                                    value = ingredientsRatio,
+                                    onValueChange = { ingredientsRatio = it },
+                                    steps = glassSize * 2 - 1,
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.navigationBarsPadding())
                     }
                 }
             }
