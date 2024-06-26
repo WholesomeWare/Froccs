@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -11,8 +12,8 @@ android {
         applicationId = "com.csakitheone.froccs"
         minSdk = 24
         targetSdk = 34
-        versionCode = 12
-        versionName = "2.1"
+        versionCode = 13
+        versionName = "2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -38,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -55,6 +57,8 @@ dependencies {
 
     implementation("io.mhssn:colorpicker:1.0.0")
     implementation("com.github.CsakiTheOne:WholesomeWare:1.0")
+
+    implementation("com.google.ai.client.generativeai:generativeai:0.8.0")
 
     implementation(libs.androidx.core.splashscreen)
 
