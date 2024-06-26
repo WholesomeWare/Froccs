@@ -1,12 +1,18 @@
 package com.csakitheone.froccs
 
 import android.os.Bundle
-import android.view.WindowInsets
-import android.view.WindowInsetsController
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
@@ -14,12 +20,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LockOpen
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -28,20 +34,19 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.csakitheone.froccs.ui.theme.FröccsTheme
-import io.mhssn.colorpicker.ColorPicker
 import io.mhssn.colorpicker.ColorPickerDialog
 import io.mhssn.colorpicker.ColorPickerType
+import java.util.Timer
+import kotlin.concurrent.timerTask
 
 class CoasterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +60,8 @@ class CoasterActivity : ComponentActivity() {
         }
 
         val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
@@ -65,7 +71,32 @@ class CoasterActivity : ComponentActivity() {
     fun CoasterScreen() {
         var isColorPickerDialogOpen by remember { mutableStateOf(false) }
         var selectedColor by remember { mutableStateOf(Color.Green) }
-        var isSizeLocked by remember { mutableStateOf(false) }
+        var isAnimating by remember { mutableStateOf(false) }
+        var isLocked by remember { mutableStateOf(false) }
+
+        val gradientColors = listOf(
+            Color.Red,
+            Color.Magenta,
+            Color.Blue,
+            Color.Cyan,
+            Color.Green,
+            Color.Yellow,
+        )
+        var currentColorIndex by remember { mutableIntStateOf(0) }
+        val animatedColor by animateColorAsState(
+            targetValue = selectedColor,
+            animationSpec = tween(2000, easing = LinearEasing),
+        )
+
+        LaunchedEffect(Unit) {
+            Timer().schedule(timerTask {
+                if (isAnimating) {
+                    currentColorIndex++
+                    if (currentColorIndex >= gradientColors.size) currentColorIndex = 0
+                    selectedColor = gradientColors[currentColorIndex]
+                }
+            }, 0, 2000)
+        }
 
         FröccsTheme {
             ColorPickerDialog(
@@ -92,35 +123,45 @@ class CoasterActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),
-                        color = selectedColor,
-                        isSizeLocked = isSizeLocked,
+                        color = if (isAnimating) animatedColor else selectedColor,
+                        isSizeLocked = isLocked,
                     )
 
                     Row(
                         modifier = Modifier
                             .padding(16.dp)
                             .alpha(.3f),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        IconButton(
-                            modifier = Modifier.padding(8.dp),
-                            onClick = {
-                                isColorPickerDialogOpen = true
-                            },
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_color_lens),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
+                        AnimatedVisibility(visible = !isLocked && !isAnimating) {
+                            IconButton(
+                                modifier = Modifier.padding(8.dp),
+                                onClick = {
+                                    isColorPickerDialogOpen = true
+                                },
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_color_lens),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            }
+                        }
+                        AnimatedVisibility(visible = !isLocked) {
+                            Switch(
+                                modifier = Modifier.padding(8.dp),
+                                checked = isAnimating,
+                                onCheckedChange = { isAnimating = it },
                             )
                         }
                         IconButton(
                             modifier = Modifier.padding(8.dp),
                             onClick = {
-                                isSizeLocked = !isSizeLocked
+                                isLocked = !isLocked
                             },
                         ) {
                             Icon(
-                                imageVector = if (isSizeLocked) Icons.Default.Lock
+                                imageVector = if (isLocked) Icons.Default.Lock
                                 else Icons.Default.LockOpen,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.primary,

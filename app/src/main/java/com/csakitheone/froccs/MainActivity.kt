@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +49,7 @@ import com.csakitheone.froccs.ui.components.RecipeView
 import com.csakitheone.froccs.ui.components.TabFroccs
 import com.csakitheone.froccs.ui.components.VineBottle
 import com.csakitheone.froccs.ui.theme.FröccsTheme
+import com.csakitheone.wholesomeware_brand.WholesomeWare
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -200,7 +202,20 @@ class MainActivity : ComponentActivity() {
                                             onClick = {
                                                 isCoasterWarningDialogVisible = true
                                                 isMenuOpen = false
-                                            }
+                                            },
+                                        )
+                                        DropdownMenuItem(
+                                            text = { Text(stringResource(id = R.string.more_apps)) },
+                                            leadingIcon = {
+                                                Icon(
+                                                    painterResource(id = com.csakitheone.wholesomeware_brand.R.drawable.ic_wholesomeware),
+                                                    contentDescription = null,
+                                                )
+                                            },
+                                            onClick = {
+                                                WholesomeWare.openPlayStore(this@MainActivity)
+                                                isMenuOpen = false
+                                            },
                                         )
                                     }
                                 }
@@ -246,15 +261,6 @@ class MainActivity : ComponentActivity() {
                                 fullness = glassSize / 10f,
                             )
 
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = "${amountVine}dl ${stringResource(id = R.string.ingredient_vine)}, ${amountSoda}dl ${
-                                    stringResource(
-                                        id = R.string.ingredient_soda
-                                    )
-                                }".replace(".0", "")
-                            )
-
                             AnimatedContent(targetState = recipe) {
                                 Text(
                                     modifier = Modifier.padding(16.dp),
@@ -268,7 +274,7 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.padding(32.dp),
                             ) {
                                 Box(
-                                    modifier = Modifier.offset(y = 4.dp),
+                                    modifier = Modifier.offset(y = 6.dp),
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     Data.getRecipes()
@@ -298,6 +304,22 @@ class MainActivity : ComponentActivity() {
                                     onValueChange = { ingredientsRatio = it },
                                     steps = glassSize * 2 - 1,
                                 )
+
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                ) {
+                                    Text(
+                                        text = "${amountVine}dl ${stringResource(id = R.string.ingredient_vine)}"
+                                            .replace(".0", ""),
+                                        style = MaterialTheme.typography.labelMedium,
+                                    )
+                                    Text(
+                                        text = "${amountSoda}dl ${stringResource(id = R.string.ingredient_soda)}"
+                                            .replace(".0", ""),
+                                        style = MaterialTheme.typography.labelMedium,
+                                    )
+                                }
                             }
                         }
 
