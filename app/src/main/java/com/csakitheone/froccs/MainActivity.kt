@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -41,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.csakitheone.froccs.data.Data
@@ -70,7 +72,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
     @Preview(showBackground = true)
     @Composable
     fun MainScreen() {
@@ -228,6 +230,18 @@ class MainActivity : ComponentActivity() {
                                             },
                                         )
                                         DropdownMenuItem(
+                                            text = { Text(stringResource(id = R.string.support_developer)) },
+                                            onClick = {
+                                                startActivity(
+                                                    Intent(
+                                                        Intent.ACTION_VIEW,
+                                                        "https://www.patreon.com/c/wolesomeware".toUri()
+                                                    )
+                                                )
+                                                isMenuOpen = false
+                                            },
+                                        )
+                                        DropdownMenuItem(
                                             text = { Text(stringResource(id = R.string.more_apps)) },
                                             leadingIcon = {
                                                 Icon(
@@ -258,25 +272,29 @@ class MainActivity : ComponentActivity() {
                         ) {
                             Row(
                                 modifier = Modifier
+                                    .padding(top = 32.dp)
                                     .horizontalScroll(rememberScrollState()),
+                                horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
                             ) {
+                                Spacer(modifier = Modifier.width(32.dp))
                                 Data.getGlassSizes()
                                     .filter { it != 0 }
-                                    .forEach { size ->
-                                        FilterChip(
-                                            modifier = Modifier
-                                                .padding(16.dp)
-                                                .graphicsLayer {
-                                                    scaleX = if (glassSize == size) 1.2f else 1f
-                                                    scaleY = if (glassSize == size) 1.2f else 1f
-                                                },
-                                            label = { Text(text = "${size}dl") },
-                                            selected = glassSize == size,
-                                            onClick = {
-                                                glassSize = size
+                                    .forEachIndexed { index, size ->
+                                        ToggleButton(
+                                            checked = glassSize == size,
+                                            onCheckedChange = { glassSize = size },
+                                            shapes = when (index) {
+                                                0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+                                                Data.getGlassSizes()
+                                                    .filter { it != 0 }.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+
+                                                else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
                                             },
-                                        )
+                                        ) {
+                                            Text(text = "${size}dl")
+                                        }
                                     }
+                                Spacer(modifier = Modifier.width(32.dp))
                             }
 
                             VineBottle(
@@ -355,6 +373,7 @@ class MainActivity : ComponentActivity() {
                             Column(
                                 modifier = Modifier
                                     .padding(horizontal = 32.dp)
+                                    .padding(bottom = 16.dp)
                                     .widthIn(max = 600.dp)
                                     .navigationBarsPadding(),
                             ) {

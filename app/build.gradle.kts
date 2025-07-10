@@ -6,14 +6,14 @@ plugins {
 
 android {
     namespace = "com.csakitheone.froccs"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.csakitheone.froccs"
         minSdk = 24
-        targetSdk = 35
-        versionCode = 14
-        versionName = "2.3"
+        targetSdk = 36
+        versionCode = 15
+        versionName = "2.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -53,7 +53,7 @@ android {
 
 dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.6.8")
-    implementation("androidx.compose.material3:material3-adaptive-navigation-suite-android:1.3.0-beta03")
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite-android:1.3.2")
 
     implementation("io.mhssn:colorpicker:1.0.0")
     implementation("com.github.CsakiTheOne:WholesomeWare:1.0")

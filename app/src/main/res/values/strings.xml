@@ -12,6 +12,7 @@
 
     <!-- Main -->
     <string name="main_tab_recipes">Recipes</string>
+    <string name="support_developer">Support the developer</string>
     <string name="more_apps">More apps</string>
 
     <string name="no_recipe_found_generate">This ratio has no name, come up with one or generate one!</string>

@@ -13,7 +13,7 @@ class AI {
 
         private const val apiKey = BuildConfig.geminiApiKey
         private val model = GenerativeModel(
-            modelName = "gemini-1.5-flash-8b",
+            modelName = "gemini-2.5-flash-lite",
             apiKey = apiKey,
             safetySettings = listOf(
                 SafetySetting(HarmCategory.DANGEROUS_CONTENT, BlockThreshold.NONE),

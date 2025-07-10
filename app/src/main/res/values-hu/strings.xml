@@ -12,6 +12,7 @@
 
     <!-- Main -->
     <string name="main_tab_recipes">Receptek</string>
+    <string name="support_developer">Fejlesztő támogatása</string>
     <string name="more_apps">További alkalmazások</string>
 
     <string name="no_recipe_found_generate">Ennek az aránynak nincs neve, találj ki vagy generálj egyet!</string>
