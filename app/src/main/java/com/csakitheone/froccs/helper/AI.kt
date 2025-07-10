@@ -13,7 +13,7 @@ class AI {
 
         private const val apiKey = BuildConfig.geminiApiKey
         private val model = GenerativeModel(
-            modelName = "gemini-1.5-flash",
+            modelName = "gemini-1.5-flash-8b",
             apiKey = apiKey,
             safetySettings = listOf(
                 SafetySetting(HarmCategory.DANGEROUS_CONTENT, BlockThreshold.NONE),
@@ -22,15 +22,13 @@ class AI {
 
 
         suspend fun generateRatioName(vine: Float, soda: Float): String {
-            // 111 tokens
+            // 126 tokens
             val prompt =
-                "Találj ki egy kreatív nevet egy fröccsnek! Példák: 1-2 Hosszúlépés, 2-2 Háp-háp, " +
-                        "1-4 Sportfröccs, 3-2 Házmester, 1-9 Sóherfröccs vagy Távolugrás, " +
-                        "5-5 Maflás, 6-4 Polgármester. Aminek adj nevet: $vine-$soda (bor-szóda)! " +
-                        "A válaszod csak az ital neve legyen!"
+                "Találj ki egy kreatív nevet egy fröccsnek! Példák: 1-2 Hosszúlépés, 2-2 Háp-háp, 1-4 Sportfröccs, 3-2 Házmester, 1-9 Sóherfröccs vagy Távolugrás, 5-5 Maflás, 6-4 Polgármester. Az első szám a bor, a második a szóda. Az arány, amit el kell nevezned: $vine-$soda. A válaszod csak az ital neve legyen!"
             try {
                 return model.generateContent(prompt).text
-                    ?.replace(Regex("""\*"""), "") ?: ""
+                    ?.replace(Regex("""\*"""), "")
+                    ?.trim() ?: ""
             } catch (e: Exception) {
                 Log.d("AI", e.message ?: "")
                 return ""

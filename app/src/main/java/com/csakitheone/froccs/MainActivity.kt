@@ -109,11 +109,14 @@ class MainActivity : ComponentActivity() {
 
             var isGenerating by remember { mutableStateOf(false) }
             var generatedRatioName by remember(amountSoda, amountVine) { mutableStateOf("") }
-            val aiCooldownMax = 15
+            val aiCooldownMax = 8
             var aiCooldown by remember { mutableIntStateOf(0) }
             val aiCooldownProgress by animateFloatAsState(
                 targetValue = (aiCooldownMax - aiCooldown) / aiCooldownMax.toFloat(),
-                animationSpec = tween(1_000)
+                animationSpec = if (aiCooldown < aiCooldownMax) tween(
+                    1_000,
+                    easing = LinearEasing
+                ) else tween(0)
             )
 
             LaunchedEffect(isGenerating) {
@@ -282,15 +285,29 @@ class MainActivity : ComponentActivity() {
                             )
 
                             AnimatedVisibility(visible = recipe != null || generatedRatioName.isNotEmpty()) {
-                                Text(
-                                    modifier = Modifier.padding(horizontal = 16.dp),
-                                    text = recipe?.name ?: generatedRatioName,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    textAlign = TextAlign.Center,
-                                )
+                                Row(
+                                    modifier = Modifier.padding(8.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(
+                                        modifier = Modifier.padding(horizontal = 8.dp),
+                                        text = recipe?.name ?: generatedRatioName,
+                                        style = MaterialTheme.typography.titleMedium,
+                                    )
+                                    if (generatedRatioName.isNotEmpty()) {
+                                        Icon(
+                                            modifier = Modifier.padding(horizontal = 8.dp),
+                                            painter = painterResource(R.drawable.ic_creation),
+                                            contentDescription = null,
+                                        )
+                                    }
+                                }
                             }
 
-                            AnimatedVisibility(visible = recipe == null) {
+                            AnimatedVisibility(
+                                visible = recipe == null &&
+                                        ingredientsRatio != ingredientsRatio.roundToInt().toFloat()
+                            ) {
                                 OutlinedCard(
                                     modifier = Modifier
                                         .padding(horizontal = 32.dp, vertical = 8.dp)
@@ -302,6 +319,7 @@ class MainActivity : ComponentActivity() {
                                         Text(
                                             modifier = Modifier.padding(8.dp),
                                             text = stringResource(id = R.string.no_recipe_found_generate),
+                                            style = MaterialTheme.typography.labelMedium,
                                         )
                                         Button(
                                             modifier = Modifier

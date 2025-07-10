@@ -6,14 +6,14 @@ plugins {
 
 android {
     namespace = "com.csakitheone.froccs"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.csakitheone.froccs"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 13
-        versionName = "2.2"
+        targetSdk = 35
+        versionCode = 14
+        versionName = "2.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -58,7 +58,7 @@ dependencies {
     implementation("io.mhssn:colorpicker:1.0.0")
     implementation("com.github.CsakiTheOne:WholesomeWare:1.0")
 
-    implementation("com.google.ai.client.generativeai:generativeai:0.8.0")
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
 
     implementation(libs.androidx.core.splashscreen)
 
